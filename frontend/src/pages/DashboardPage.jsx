@@ -103,7 +103,7 @@ export default function DashboardPage() {
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
             Welcome, {user?.name}. You are logged in as a{' '}
-            <span className="font-medium capitalize">{user.role}</span>{' '}
+            <span className="font-medium capitalize">{user?.role}</span>{' '}
             at {user?.company_name}.
           </p>
         </div>
