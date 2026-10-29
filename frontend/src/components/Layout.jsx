@@ -23,133 +23,156 @@ export default function Layout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
-      {/* Mobile Sidebar Overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
-      <aside className={`glass-card fixed inset-y-0 left-0 z-50 w-64 border-r transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:shadow-none`}>
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col">
+      {/* Desktop Header */}
+      <header className="glass-card hidden md:flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
+        <div className="flex items-center gap-3">
           <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">Awiad ERP</h1>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-            {user?.company_name || 'Master Admin'}
-          </p>
+          <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">{user?.company_name || 'Master Admin'}</span>
+        </div>
+        <div className="flex items-center gap-3">
           <button
             onClick={toggleTheme}
-            className="mt-4 p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+            className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
             title="Toggle dark mode"
           >
             {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
+          <div className="hidden md:block text-sm text-gray-600 dark:text-gray-400">{user?.name}</div>
         </div>
+      </header>
 
-        <nav className="p-4 space-y-1">
-          {isSuperAdmin && (
-            <>
-              <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Super Admin
-              </div>
-              <button
-                onClick={() => navigate('/admin')}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  window.location.pathname === '/admin'
-                    ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                }`}
-              >
-                <LayoutGrid className="w-5 h-5" />
-                Master Admin
-              </button>
-            </>
-          )}
-
-          <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4">
-            Modules
-          </div>
-
-          <button
-            onClick={() => navigate('/home')}
-            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              window.location.pathname === '/home'
-                ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-            }`}
-          >
-            <LayoutGrid className="w-5 h-5" />
-            Home Hub
-          </button>
-
-          {isCompanyAdmin || isEmployee ? (
-            <>
-              <button
-                onClick={() => navigate('/sales')}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  window.location.pathname === '/sales'
-                    ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                }`}
-              >
-                <ShoppingCart className="w-5 h-5" />
-                Sales
-              </button>
-
-              <button
-                onClick={() => navigate('/projects')}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  window.location.pathname === '/projects'
-                    ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                }`}
-              >
-                <FolderKanban className="w-5 h-5" />
-                Projects
-              </button>
-            </>
-          ) : null}
-        </nav>
-
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700">
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-          >
-            <LogOut className="w-5 h-5" />
-            Sign Out
-          </button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <div className="md:pl-64">
-        {/* Mobile Header */}
-        <header className="glass-card md:hidden flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-gray-600 dark:text-gray-300"
-          >
-            <Menu className="w-6 h-6" />
-          </button>
-          <h1 className="text-lg font-semibold">{user?.company_name || 'Ariad ERP'}</h1>
-          <div className="flex items-center gap-2">
+      {/* Desktop + Mobile Wrapper */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        <aside
+          className={`glass-card w-64 border-r shrink-0 transition-all duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:fixed md:inset-y-0 md:left-0 md:z-40`}
+        >
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">Awiad ERP</h1>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              {user?.company_name || 'Master Admin'}
+            </p>
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+              className="mt-4 p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
               title="Toggle dark mode"
             >
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-            <span className="text-sm text-gray-600 dark:text-gray-400">{user?.name}</span>
           </div>
-        </header>
 
-        <main className="p-4 md:p-6">
-          <Outlet />
-        </main>
+          <nav className="p-4 space-y-1">
+            {isSuperAdmin && (
+              <>
+                <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Super Admin
+                </div>
+                <button
+                  onClick={() => navigate('/admin')}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    window.location.pathname === '/admin'
+                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  <LayoutGrid className="w-5 h-5" />
+                  Master Admin
+                </button>
+              </>
+            )}
+
+            <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4">
+              Modules
+            </div>
+
+            <button
+              onClick={() => navigate('/home')}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                window.location.pathname === '/home'
+                  ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+            >
+              <LayoutGrid className="w-5 h-5" />
+              Home Hub
+            </button>
+
+            {isCompanyAdmin || isEmployee ? (
+              <>
+                <button
+                  onClick={() => navigate('/sales')}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    window.location.pathname === '/sales'
+                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  Sales
+                </button>
+
+                <button
+                  onClick={() => navigate('/projects')}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    window.location.pathname === '/projects'
+                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  <FolderKanban className="w-5 h-5" />
+                  Projects
+                </button>
+              </>
+            ) : null}
+          </nav>
+
+          <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700">
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+            >
+              <LogOut className="w-5 h-5" />
+              Sign Out
+            </button>
+          </div>
+        </aside>
+
+        {/* Mobile Sidebar Overlay */}
+        {sidebarOpen && !window.matchMedia('(min-width: 768px)').matches && (
+          <div
+            className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
+        {/* Main Content */}
+        <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900">
+          {/* Mobile Header */}
+          <header className="glass-card md:hidden flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="text-gray-600 dark:text-gray-300"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            <h1 className="text-lg font-semibold">{user?.company_name || 'Ariad ERP'}</h1>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                title="Toggle dark mode"
+              >
+                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+              <span className="hidden md:inline text-sm text-gray-600 dark:text-gray-400">{user?.name}</span>
+            </div>
+          </header>
+
+          <main className="p-4 md:p-6">
+            <Outlet />
+          </main>
+        </div>
       </div>
     </div>
   );
