@@ -2,13 +2,14 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useState } from 'react';
-import { LayoutGrid, ShoppingCart, FolderKanban, LogOut, Menu, User as UserIcon, Sun, Moon } from 'lucide-react';
+import { LayoutGrid, ShoppingCart, FolderKanban, LogOut, Menu, ChevronLeft, Sun, Moon } from 'lucide-react';
 
 export default function Layout() {
   const { user, logout, loading } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Wait for auth to load before rendering
   if (loading) return null;
@@ -22,6 +23,8 @@ export default function Layout() {
     navigate('/login');
   };
 
+  const isDesktop = window.innerWidth >= 768;
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col">
       {/* Desktop Header */}
@@ -31,43 +34,55 @@ export default function Layout() {
           <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">{user?.company_name || 'Master Admin'}</span>
         </div>
         <div className="flex items-center gap-3">
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-            title="Toggle dark mode"
-          >
-            {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </button>
           <div className="hidden md:block text-sm text-gray-600 dark:text-gray-400">{user?.name}</div>
         </div>
       </header>
 
       {/* Desktop + Mobile Wrapper */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative">
         {/* Sidebar */}
         <aside
-          className={`glass-card w-64 border-r shrink-0 transition-all duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:fixed md:inset-y-0 md:left-0 md:z-40`}
+          className={`glass-card border-r shrink-0 transition-all duration-300 z-40 ${
+            isDesktop
+              ? `w-64 ${sidebarCollapsed ? 'w-16' : ''} fixed inset-y-0 left-0`
+              : `w-64 fixed inset-y-0 left-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`
+          }`}
         >
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">Awiad ERP</h1>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              {user?.company_name || 'Master Admin'}
-            </p>
+          {/* Collapse toggle (desktop only) */}
+          {isDesktop && (
+            <button
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className="absolute top-4 right-0 -mr-8 p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors z-10"
+              title="Collapse sidebar"
+            >
+              <ChevronLeft className={`w-4 h-4 ${sidebarCollapsed ? 'rotate-180' : ''}`} />
+            </button>
+          )}
+
+          <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+            {!sidebarCollapsed && (
+              <>
+                <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">Awiad ERP</h1>
+                <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">{user?.company_name || 'Master Admin'}</span>
+              </>
+            )}
             <button
               onClick={toggleTheme}
-              className="mt-4 p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+              className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
               title="Toggle dark mode"
             >
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
           </div>
 
-          <nav className="p-4 space-y-1">
+          <nav className="p-2 space-y-1">
             {isSuperAdmin && (
               <>
-                <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                  Super Admin
-                </div>
+                {!sidebarCollapsed && (
+                  <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                    Super Admin
+                  </div>
+                )}
                 <button
                   onClick={() => navigate('/admin')}
                   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -76,15 +91,17 @@ export default function Layout() {
                       : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
                 >
-                  <LayoutGrid className="w-5 h-5" />
-                  Master Admin
+                  <LayoutGrid className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
+                  {!sidebarCollapsed && <span>Master Admin</span>}
                 </button>
               </>
             )}
 
-            <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4">
-              Modules
-            </div>
+            {!sidebarCollapsed && (
+              <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4">
+                Modules
+              </div>
+            )}
 
             <button
               onClick={() => navigate('/home')}
@@ -94,8 +111,8 @@ export default function Layout() {
                   : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
-              <LayoutGrid className="w-5 h-5" />
-              Home Hub
+              <LayoutGrid className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
+              {!sidebarCollapsed && <span>Home Hub</span>}
             </button>
 
             {isCompanyAdmin || isEmployee ? (
@@ -108,8 +125,8 @@ export default function Layout() {
                       : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
                 >
-                  <ShoppingCart className="w-5 h-5" />
-                  Sales
+                  <ShoppingCart className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
+                  {!sidebarCollapsed && <span>Sales</span>}
                 </button>
 
                 <button
@@ -120,8 +137,8 @@ export default function Layout() {
                       : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
                 >
-                  <FolderKanban className="w-5 h-5" />
-                  Projects
+                  <FolderKanban className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
+                  {!sidebarCollapsed && <span>Projects</span>}
                 </button>
               </>
             ) : null}
@@ -130,44 +147,41 @@ export default function Layout() {
           <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors ${
+                sidebarCollapsed ? 'justify-center' : ''
+              }`}
             >
               <LogOut className="w-5 h-5" />
-              Sign Out
+              {!sidebarCollapsed && <span>Sign Out</span>}
             </button>
           </div>
         </aside>
 
         {/* Mobile Sidebar Overlay */}
-        {sidebarOpen && !window.matchMedia('(min-width: 768px)').matches && (
+        {!isDesktop && sidebarOpen && (
           <div
-            className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm"
+            className="fixed inset-0 bg-black/50 z-30 backdrop-blur-sm"
             onClick={() => setSidebarOpen(false)}
           />
         )}
 
         {/* Main Content */}
-        <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900">
+        <div className={`flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 transition-all duration-300 ${isDesktop ? (sidebarCollapsed ? 'pl-16' : 'pl-64') : ''}`}>
           {/* Mobile Header */}
-          <header className="glass-card md:hidden flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="text-gray-600 dark:text-gray-300"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-            <h1 className="text-lg font-semibold">{user?.company_name || 'Ariad ERP'}</h1>
-            <div className="flex items-center gap-2">
+          {!isDesktop && (
+            <header className="glass-card flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
               <button
-                onClick={toggleTheme}
-                className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                title="Toggle dark mode"
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="text-gray-600 dark:text-gray-300"
               >
-                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                <Menu className="w-6 h-6" />
               </button>
-              <span className="hidden md:inline text-sm text-gray-600 dark:text-gray-400">{user?.name}</span>
-            </div>
-          </header>
+              <h1 className="text-lg font-semibold">{user?.company_name || 'Ariad ERP'}</h1>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600 dark:text-gray-400">{user?.name}</span>
+              </div>
+            </header>
+          )}
 
           <main className="p-4 md:p-6">
             <Outlet />
