@@ -1,10 +1,12 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { useState } from 'react';
-import { LayoutGrid, ShoppingCart, FolderKanban, LogOut, Menu, User as UserIcon } from 'lucide-react';
+import { LayoutGrid, ShoppingCart, FolderKanban, LogOut, Menu, User as UserIcon, Sun, Moon } from 'lucide-react';
 
 export default function Layout() {
   const { user, logout, loading } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -37,6 +39,13 @@ export default function Layout() {
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
             {user?.company_name || 'Master Admin'}
           </p>
+          <button
+            onClick={toggleTheme}
+            className="mt-4 p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+            title="Toggle dark mode"
+          >
+            {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
         </div>
 
         <nav className="p-4 space-y-1">
