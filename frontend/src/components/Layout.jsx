@@ -172,6 +172,7 @@ export default function Layout() {
               {!sidebarCollapsed && <span>Sign Out</span>}
             </button>
           </div>
+        </div>
         </aside>
         {!isDesktop && sidebarOpen && (
           <div
