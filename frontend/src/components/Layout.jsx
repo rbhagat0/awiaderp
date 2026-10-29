@@ -184,7 +184,7 @@ export default function Layout() {
         {/* Main Content - header width adjusts dynamically with sidebar */}
         <div className="flex-1 overflow-y-auto bg-premium-dark dark:bg-premium-dark flex flex-col">
           {/* Content Header - dynamic width based on sidebar state */}
-          <header className={`glass-card flex items-center justify-between border-b border-premium-border sticky top-0 z-30 ${sidebarCollapsed ? 'px-4' : 'px-6'} py-4`}>
+          <header className={`glass-card flex items-center justify-between border-b border-premium-border sticky top-0 z-30 w-full ${sidebarCollapsed ? 'px-4' : 'px-6'} py-4`}>
             <div className="flex items-center gap-3">
               {!isDesktop && (
                 <button
