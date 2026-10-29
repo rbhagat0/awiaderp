@@ -7,6 +7,7 @@ import HomeHubPage from './pages/HomeHubPage';
 import SalesPage from './pages/SalesPage';
 import ProjectsPage from './pages/ProjectsPage';
 import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -17,12 +18,12 @@ const router = createBrowserRouter([
       </AuthProvider>
     ),
     children: [
-      { index: true, element: <DashboardPage /> },
-      { path: 'dashboard', element: <DashboardPage /> },
-      { path: 'admin', element: <MasterAdminPage /> },
-      { path: 'home', element: <HomeHubPage /> },
-      { path: 'sales', element: <SalesPage /> },
-      { path: 'projects', element: <ProjectsPage /> },
+      { index: true, element: <ProtectedRoute><DashboardPage /></ProtectedRoute> },
+      { path: 'dashboard', element: <ProtectedRoute><DashboardPage /></ProtectedRoute> },
+      { path: 'admin', element: <ProtectedRoute><MasterAdminPage /></ProtectedRoute> },
+      { path: 'home', element: <ProtectedRoute><HomeHubPage /></ProtectedRoute> },
+      { path: 'sales', element: <ProtectedRoute><SalesPage /></ProtectedRoute> },
+      { path: 'projects', element: <ProtectedRoute><ProjectsPage /></ProtectedRoute> },
     ],
   },
   {
