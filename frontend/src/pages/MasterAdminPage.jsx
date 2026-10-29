@@ -17,6 +17,9 @@ export default function MasterAdminPage() {
     contact_email: '',
     contact_phone: '',
     address: '',
+    admin_name: '',
+    admin_email: '',
+    admin_password: '',
   });
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('success');
@@ -60,6 +63,9 @@ export default function MasterAdminPage() {
       contact_email: '',
       contact_phone: '',
       address: '',
+      admin_name: '',
+      admin_email: '',
+      admin_password: '',
     });
     setShowModal(true);
   };
@@ -74,6 +80,9 @@ export default function MasterAdminPage() {
       contact_email: company.contact_email || '',
       contact_phone: company.contact_phone || '',
       address: company.address || '',
+      admin_name: '',
+      admin_email: '',
+      admin_password: '',
     });
     setShowModal(true);
   };
@@ -101,8 +110,11 @@ export default function MasterAdminPage() {
           contact_email: companyForm.contact_email,
           contact_phone: companyForm.contact_phone,
           address: companyForm.address,
+          admin_name: companyForm.admin_name,
+          admin_email: companyForm.admin_email,
+          admin_password: companyForm.admin_password,
         });
-        setMessage('Company created successfully');
+        setMessage('Company created successfully with admin account');
       }
       setShowModal(false);
       setEditingCompany(null);
@@ -376,6 +388,56 @@ export default function MasterAdminPage() {
                   </div>
                 </div>
               </div>
+
+              {!editingCompany && (
+                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Company Admin Login Credentials</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                    These credentials will be used by the company admin to log in and manage their company.
+                  </p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Admin Full Name
+                      </label>
+                      <input
+                        type="text"
+                        value={companyForm.admin_name}
+                        onChange={(e) => setCompanyForm({ ...companyForm, admin_name: e.target.value })}
+                        className="input-field"
+                        placeholder="Jane Smith"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Admin Email
+                      </label>
+                      <input
+                        type="email"
+                        value={companyForm.admin_email}
+                        onChange={(e) => setCompanyForm({ ...companyForm, admin_email: e.target.value })}
+                        className="input-field"
+                        placeholder="admin@company.com"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Admin Password
+                    </label>
+                    <input
+                      type="password"
+                      value={companyForm.admin_password}
+                      onChange={(e) => setCompanyForm({ ...companyForm, admin_password: e.target.value })}
+                      className="input-field"
+                      placeholder="••••••••"
+                      required
+                    />
+                  </div>
+                </div>
+              )}
 
               <div className="flex gap-3 pt-6">
                 <button type="submit" className="btn-primary flex-1" disabled={deletingId}>

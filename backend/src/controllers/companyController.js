@@ -1,4 +1,5 @@
 import { pool } from '../config/db.js';
+import bcrypt from 'bcryptjs';
 
 export const companyController = {
   // Get all companies (Super Admin only)
@@ -19,21 +20,55 @@ export const companyController = {
     }
   },
 
-  // Create a new company (Super Admin only)
+  // Create a new company with company_admin account (Super Admin only)
   async createCompany(req, res) {
-    const { name, subscription_tier = 'starter', status = 'active' } = req.body;
+    const { name, subscription_tier = 'starter', status = 'active', admin_email, admin_password, admin_name } = req.body;
+
+    if (!admin_email || !admin_password || !admin_name) {
+      return res.status(400).json({ error: 'Admin email, password, and name are required' });
+    }
+
+    const client = await pool.connect();
 
     try {
-      const result = await pool.query(
+      await client.query('BEGIN');
+
+      // Create the company
+      const companyResult = await client.query(
         `INSERT INTO companies (name, subscription_tier, status)
          VALUES ($1, $2, $3)
          RETURNING id, name, subscription_tier, status, created_at`,
         [name, subscription_tier, status]
       );
-      res.status(201).json(result.rows[0]);
+
+      const company = companyResult.rows[0];
+
+      // Hash the admin password
+      const hashedPassword = await bcrypt.hash(admin_password, 10);
+
+      // Create the company_admin user
+      const userResult = await client.query(
+        `INSERT INTO users (email, password, role, company_id, name)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING id, email, role, company_id, name, created_at`,
+        [admin_email, hashedPassword, 'company_admin', company.id, admin_name]
+      );
+
+      await client.query('COMMIT');
+
+      res.status(201).json({
+        company,
+        admin_user: userResult.rows[0],
+      });
     } catch (err) {
+      await client.query('ROLLBACK');
       console.error(err);
+      if (err.code === '23505') { // unique_violation
+        return res.status(400).json({ error: 'Admin email already registered' });
+      }
       res.status(500).json({ error: 'Failed to create company' });
+    } finally {
+      client.release();
     }
   },
 
