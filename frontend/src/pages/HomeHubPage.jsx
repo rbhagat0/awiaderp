@@ -27,16 +27,18 @@ export default function HomeHubPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Company Home</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Welcome back to {user?.company_name}
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-green-500"></span>
-          <span className="text-sm text-gray-600 dark:text-gray-400">System Operational</span>
+      <div className="glass-panel p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Company Home</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">
+              Welcome back to {user?.company_name}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-green-500"></span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">System Operational</span>
+          </div>
         </div>
       </div>
 

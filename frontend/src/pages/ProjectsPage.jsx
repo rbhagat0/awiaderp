@@ -81,26 +81,28 @@ export default function ProjectsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Projects</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Manage projects and track tasks
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setShowProjectForm(true)}
-            className="btn-primary flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" /> Add Project
-          </button>
-          <button
-            onClick={() => setShowTaskForm(true)}
-            className="btn-primary flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" /> Add Task
-          </button>
+      <div className="glass-panel p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Projects</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">
+              Manage projects and track tasks
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowProjectForm(true)}
+              className="btn-primary flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" /> Add Project
+            </button>
+            <button
+              onClick={() => setShowTaskForm(true)}
+              className="btn-primary flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" /> Add Task
+            </button>
+          </div>
         </div>
       </div>
 

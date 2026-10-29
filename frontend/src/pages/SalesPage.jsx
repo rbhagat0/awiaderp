@@ -81,26 +81,28 @@ export default function SalesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Sales CRM</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Manage your clients and sales pipeline
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setShowClientForm(true)}
-            className="btn-primary flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" /> Add Client
-          </button>
-          <button
-            onClick={() => setShowLeadForm(true)}
-            className="btn-primary flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" /> Add Lead
-          </button>
+      <div className="glass-panel p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Sales CRM</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">
+              Manage your clients and sales pipeline
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowClientForm(true)}
+              className="btn-primary flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" /> Add Client
+            </button>
+            <button
+              onClick={() => setShowLeadForm(true)}
+              className="btn-primary flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" /> Add Lead
+            </button>
+          </div>
         </div>
       </div>
 
