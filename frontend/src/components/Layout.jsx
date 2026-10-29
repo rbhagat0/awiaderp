@@ -37,7 +37,7 @@ export default function Layout() {
       <div className="flex flex-1 overflow-hidden relative">
         {/* Sidebar - covers full height */}
         <aside
-          className={`border-r border-premium-border transition-all duration-300 z-50 min-h-full ${isDesktop ? 'glass-card' : 'bg-premium-card/95 backdrop-blur-xl'} ${isDesktop ? (sidebarCollapsed ? 'w-20' : 'w-72') : 'fixed inset-y-0 left-0 w-72'} ${!isDesktop ? (sidebarOpen ? 'translate-x-0' : '-translate-x-full') : ''} ${isDesktop ? 'mt-4 md:mt-6 mb-4 md:mb-6 ml-4 md:ml-6' : ''}`}
+          className={`border-r border-premium-border transition-all duration-300 z-50 min-h-full self-start ${isDesktop ? 'glass-card' : 'bg-premium-card/95 backdrop-blur-xl'} ${isDesktop ? (sidebarCollapsed ? 'w-20' : 'w-72') : 'fixed inset-y-0 left-0 w-72'} ${!isDesktop ? (sidebarOpen ? 'translate-x-0' : '-translate-x-full') : ''} ${isDesktop ? 'mt-4 md:mt-6 mb-4 md:mb-6 ml-4 md:ml-6' : ''}`}
         >
           {/* Sidebar Header with collapse button inside */}
           <div className="p-5 border-b border-premium-border flex items-center justify-between relative">
