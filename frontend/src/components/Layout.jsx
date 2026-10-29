@@ -48,11 +48,7 @@ export default function Layout() {
       <div className="flex flex-1 overflow-hidden relative">
         {/* Sidebar */}
         <aside
-          className={`glass-card border-r shrink-0 transition-all duration-300 z-40 fixed inset-y-0 left-0 ${
-            isDesktop
-              ? `w-64 ${sidebarCollapsed ? 'w-16' : ''}`
-              : `${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`
-          }`}
+          className={`glass-card border-r shrink-0 transition-all duration-300 z-40 ${isDesktop ? '' : 'fixed inset-y-0 left-0'} ${isDesktop ? `w-64 ${sidebarCollapsed ? 'w-16' : ''}` : `${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}`}
         >
           {/* Sidebar Header with collapse button inside */}
           <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between relative">
@@ -173,7 +169,7 @@ export default function Layout() {
         )}
 
         {/* Main Content */}
-        <div className={`flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 transition-all duration-300 ${isDesktop ? (sidebarCollapsed ? 'pl-16' : 'pl-64') : ''}`}>
+        <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900">
           {/* Mobile Header */}
           {!isDesktop && (
             <header className="glass-card flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
