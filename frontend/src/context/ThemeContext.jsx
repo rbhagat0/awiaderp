@@ -17,6 +17,13 @@ export const ThemeProvider = ({ children }) => {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  // Add smooth transition class when theme changes
+  useEffect(() => {
+    const root = window.document.documentElement;
+    root.classList.add('theme-transition');
+    setTimeout(() => root.classList.remove('theme-transition'), 300);
+  }, [theme]);
+
   const toggleTheme = () => {
     setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
   };

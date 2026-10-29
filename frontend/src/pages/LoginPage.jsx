@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../lib/api';
+import { useTheme } from '../context/ThemeContext';
 import {
   Mail,
   Lock,
   User,
   ShieldAlert,
   ArrowRight,
+  Sun,
+  Moon,
 } from 'lucide-react';
 
 export default function LoginPage() {
@@ -15,6 +18,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,6 +53,13 @@ export default function LoginPage() {
           </div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome back</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">Sign in to your Awiad ERP account</p>
+          <button
+            onClick={toggleTheme}
+            className="mt-4 p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+            title="Toggle dark mode"
+          >
+            {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
         </div>
 
         {error && (
