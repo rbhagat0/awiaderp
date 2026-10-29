@@ -6,6 +6,7 @@ import { clientController } from '../controllers/clientController.js';
 import { leadController } from '../controllers/leadController.js';
 import { projectController } from '../controllers/projectController.js';
 import { taskController } from '../controllers/taskController.js';
+import { employeeController } from '../controllers/employeeController.js';
 
 const router = express.Router();
 
@@ -19,6 +20,7 @@ router.get('/companies', authenticateToken, authorizeRoles('super_admin'), compa
 router.post('/companies', authenticateToken, authorizeRoles('super_admin'), companyController.createCompany);
 router.get('/companies/:id', authenticateToken, authorizeRoles('super_admin'), companyController.getCompanyById);
 router.patch('/companies/:id', authenticateToken, authorizeRoles('super_admin'), companyController.updateCompany);
+router.patch('/companies/details', authenticateToken, authorizeRoles('company_admin'), companyController.updateCompanyDetails);
 
 // Client routes (Tenant)
 router.get('/clients', authenticateToken, requireCompanyAccess, clientController.getClients);
@@ -43,5 +45,11 @@ router.get('/tasks', authenticateToken, requireCompanyAccess, taskController.get
 router.post('/tasks', authenticateToken, requireCompanyAccess, taskController.createTask);
 router.put('/tasks/:id', authenticateToken, requireCompanyAccess, taskController.updateTask);
 router.delete('/tasks/:id', authenticateToken, requireCompanyAccess, taskController.deleteTask);
+
+// Employee routes (Company Admin)
+router.get('/employees', authenticateToken, authorizeRoles('company_admin'), employeeController.getEmployees);
+router.post('/employees', authenticateToken, authorizeRoles('company_admin'), employeeController.createEmployee);
+router.put('/employees/:id', authenticateToken, authorizeRoles('company_admin'), employeeController.updateEmployee);
+router.delete('/employees/:id', authenticateToken, authorizeRoles('company_admin'), employeeController.deleteEmployee);
 
 export default router;

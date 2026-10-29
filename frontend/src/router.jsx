@@ -6,6 +6,8 @@ import MasterAdminPage from './pages/MasterAdminPage';
 import HomeHubPage from './pages/HomeHubPage';
 import SalesPage from './pages/SalesPage';
 import ProjectsPage from './pages/ProjectsPage';
+import CompanyAdminDashboard from './pages/CompanyAdminDashboard';
+import EmployeeManagement from './pages/EmployeeManagement';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -24,6 +26,8 @@ const router = createBrowserRouter([
       { path: 'home', element: <ProtectedRoute><HomeHubPage /></ProtectedRoute> },
       { path: 'sales', element: <ProtectedRoute><SalesPage /></ProtectedRoute> },
       { path: 'projects', element: <ProtectedRoute><ProjectsPage /></ProtectedRoute> },
+      { path: 'company-admin', element: <ProtectedRoute><CompanyAdminDashboard /></ProtectedRoute> },
+      { path: 'employees', element: <ProtectedRoute><EmployeeManagement /></ProtectedRoute> },
     ],
   },
   {

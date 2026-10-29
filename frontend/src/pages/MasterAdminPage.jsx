@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../lib/api';
-import { Plus, Trash2, Edit3 } from 'lucide-react';
+import { Plus, Trash2, Edit3, Mail, Phone, MapPin, Building2 } from 'lucide-react';
 
 export default function MasterAdminPage() {
   const { user } = useAuth();
@@ -9,6 +9,14 @@ export default function MasterAdminPage() {
   const [loading, setLoading] = useState(true);
   const [newCompany, setNewCompany] = useState({ name: '', subscription_tier: 'starter', status: 'active' });
   const [showForm, setShowForm] = useState(false);
+  const [editingCompany, setEditingCompany] = useState(null);
+  const [editDetails, setEditDetails] = useState({
+    contact_person: '',
+    contact_email: '',
+    contact_phone: '',
+    address: '',
+  });
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     if (user?.role === 'super_admin') {
@@ -45,8 +53,11 @@ export default function MasterAdminPage() {
       setShowForm(false);
       setNewCompany({ name: '', subscription_tier: 'starter', status: 'active' });
       fetchCompanies();
+      setMessage('Company created successfully');
+      setTimeout(() => setMessage(''), 3000);
     } catch (err) {
-      console.error(err);
+      setMessage(err.response?.data?.error || 'Failed to create company');
+      setTimeout(() => setMessage(''), 3000);
     }
   };
 
@@ -56,6 +67,30 @@ export default function MasterAdminPage() {
       fetchCompanies();
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleEditDetails = (company) => {
+    setEditingCompany(company.id);
+    setEditDetails({
+      contact_person: company.contact_person || '',
+      contact_email: company.contact_email || '',
+      contact_phone: company.contact_phone || '',
+      address: company.address || '',
+    });
+  };
+
+  const handleSaveDetails = async (e) => {
+    e.preventDefault();
+    try {
+      await api.patch('/companies/details', editDetails);
+      setEditingCompany(null);
+      fetchCompanies();
+      setMessage('Company details updated successfully');
+      setTimeout(() => setMessage(''), 3000);
+    } catch (err) {
+      setMessage(err.response?.data?.error || 'Failed to update details');
+      setTimeout(() => setMessage(''), 3000);
     }
   };
 
@@ -78,6 +113,12 @@ export default function MasterAdminPage() {
           <Plus className="w-4 h-4" /> Add Company
         </button>
       </div>
+
+      {message && (
+        <div className="p-3 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-sm border border-green-100 dark:border-green-800/30">
+          {message}
+        </div>
+      )}
 
       {loading ? (
         <div className="text-center py-10 text-gray-500 dark:text-gray-400">
@@ -134,6 +175,27 @@ export default function MasterAdminPage() {
                     }`}>
                       {company.status}
                     </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2">
+                      {editingCompany === company.id ? (
+                        <button
+                          onClick={() => setEditingCompany(null)}
+                          className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                          title="Cancel"
+                        >
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleEditDetails(company)}
+                          className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg"
+                          title="Edit Details"
+                        >
+                          <Building2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -196,6 +258,76 @@ export default function MasterAdminPage() {
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
+                className="btn-secondary flex-1"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {editingCompany && (
+        <div className="glass-card p-6">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Edit Company Details</h2>
+          <form onSubmit={handleSaveDetails} className="space-y-4 max-w-md">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Contact Person
+                </label>
+                <input
+                  type="text"
+                  value={editDetails.contact_person}
+                  onChange={(e) => setEditDetails({ ...editDetails, contact_person: e.target.value })}
+                  className="input-field"
+                  placeholder="John Doe"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Contact Email
+                </label>
+                <input
+                  type="email"
+                  value={editDetails.contact_email}
+                  onChange={(e) => setEditDetails({ ...editDetails, contact_email: e.target.value })}
+                  className="input-field"
+                  placeholder="admin@company.com"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Contact Phone
+                </label>
+                <input
+                  type="tel"
+                  value={editDetails.contact_phone}
+                  onChange={(e) => setEditDetails({ ...editDetails, contact_phone: e.target.value })}
+                  className="input-field"
+                  placeholder="+1 234 567 8900"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Address
+                </label>
+                <input
+                  type="text"
+                  value={editDetails.address}
+                  onChange={(e) => setEditDetails({ ...editDetails, address: e.target.value })}
+                  className="input-field"
+                  placeholder="123 Business Street, City"
+                />
+              </div>
+            </div>
+            <div className="flex gap-3 pt-4">
+              <button type="submit" className="btn-primary flex-1">Save Details</button>
+              <button
+                type="button"
+                onClick={() => setEditingCompany(null)}
                 className="btn-secondary flex-1"
               >
                 Cancel

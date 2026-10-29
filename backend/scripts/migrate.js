@@ -102,6 +102,15 @@ async function migrate() {
     await client.query('CREATE INDEX IF NOT EXISTS idx_projects_company_id ON projects(company_id);');
     await client.query('CREATE INDEX IF NOT EXISTS idx_tasks_company_id ON tasks(company_id);');
 
+    // Add company details fields if not exist
+    await client.query(`
+      ALTER TABLE companies 
+      ADD COLUMN IF NOT EXISTS contact_person VARCHAR(255),
+      ADD COLUMN IF NOT EXISTS contact_email VARCHAR(255),
+      ADD COLUMN IF NOT EXISTS contact_phone VARCHAR(50),
+      ADD COLUMN IF NOT EXISTS address TEXT;
+    `);
+
     await client.query('COMMIT');
     console.log('Migration completed successfully');
   } catch (err) {

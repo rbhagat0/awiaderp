@@ -2,7 +2,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useState, useEffect } from 'react';
-import { LayoutGrid, ShoppingCart, FolderKanban, LogOut, Menu, ChevronLeft, Sun, Moon } from 'lucide-react';
+import { LayoutGrid, ShoppingCart, FolderKanban, LogOut, Menu, ChevronLeft, Sun, Moon, User, Building2 } from 'lucide-react';
 
 export default function Layout() {
   const { user, logout, loading } = useAuth();
@@ -79,6 +79,38 @@ export default function Layout() {
                 >
                   <LayoutGrid className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
                   {!sidebarCollapsed && <span>Master Admin</span>}
+                </button>
+              </>
+            )}
+
+            {isCompanyAdmin && (
+              <>
+                {!sidebarCollapsed && (
+                  <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4">
+                    Company Admin
+                  </div>
+                )}
+                <button
+                  onClick={() => navigate('/company-admin')}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    window.location.pathname === '/company-admin'
+                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  <Building2 className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
+                  {!sidebarCollapsed && <span>Company Dashboard</span>}
+                </button>
+                <button
+                  onClick={() => navigate('/employees')}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    window.location.pathname === '/employees'
+                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  <User className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
+                  {!sidebarCollapsed && <span>Employees</span>}
                 </button>
               </>
             )}

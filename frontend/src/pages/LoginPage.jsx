@@ -34,6 +34,8 @@ export default function LoginPage() {
 
       if (user.role === 'super_admin') {
         navigate('/admin');
+      } else if (user.role === 'company_admin') {
+        navigate('/company-admin');
       } else {
         navigate('/home');
       }

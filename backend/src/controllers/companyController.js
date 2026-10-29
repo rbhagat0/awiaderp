@@ -64,6 +64,35 @@ export const companyController = {
     }
   },
 
+  // Update company details (Company Admin - their own company)
+  async updateCompanyDetails(req, res) {
+    const { company_id } = req.user;
+    const { contact_person, contact_email, contact_phone, address } = req.body;
+
+    try {
+      const result = await pool.query(
+        `UPDATE companies
+         SET contact_person = COALESCE($1, contact_person),
+             contact_email = COALESCE($2, contact_email),
+             contact_phone = COALESCE($3, contact_phone),
+             address = COALESCE($4, address),
+             updated_at = NOW()
+         WHERE id = $5
+         RETURNING id, name, subscription_tier, status, contact_person, contact_email, contact_phone, address, updated_at`,
+        [contact_person, contact_email, contact_phone, address, company_id]
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Company not found' });
+      }
+
+      res.json(result.rows[0]);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to update company details' });
+    }
+  },
+
   // Get company by ID
   async getCompanyById(req, res) {
     const { id } = req.params;
