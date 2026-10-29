@@ -1,0 +1,5 @@
+name = "awiaderp-frontend"
+build.command = "npm run build"
+build.outputDirectory = "dist"
+[observability]
+enabled = true

@@ -1,0 +1,2 @@
+UI Generation Prompt:
+"When generating React components, strictly adhere to the following design rules: Use Tailwind CSS for all styling and lucide-react for icons. The design must be modern and card-based, incorporating subtle glassmorphism effects (backdrop-blur, semi-transparent backgrounds, thin borders). Ensure every element fully supports both light and dark mode using Tailwind's dark: classes. The component must be fully responsive and function flawlessly on mobile screens."
