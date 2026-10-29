@@ -20,6 +20,7 @@ router.get('/companies', authenticateToken, authorizeRoles('super_admin'), compa
 router.post('/companies', authenticateToken, authorizeRoles('super_admin'), companyController.createCompany);
 router.get('/companies/:id', authenticateToken, authorizeRoles('super_admin'), companyController.getCompanyById);
 router.patch('/companies/:id', authenticateToken, authorizeRoles('super_admin'), companyController.updateCompany);
+router.delete('/companies/:id', authenticateToken, authorizeRoles('super_admin'), companyController.deleteCompany);
 router.patch('/companies/details', authenticateToken, authorizeRoles('company_admin'), companyController.updateCompanyDetails);
 
 // Client routes (Tenant)

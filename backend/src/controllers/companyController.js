@@ -37,20 +37,25 @@ export const companyController = {
     }
   },
 
-  // Update company subscription/status (Super Admin only)
+  // Update company subscription/status/details (Super Admin only)
   async updateCompany(req, res) {
     const { id } = req.params;
-    const { subscription_tier, status } = req.body;
+    const { name, subscription_tier, status, contact_person, contact_email, contact_phone, address } = req.body;
 
     try {
       const result = await pool.query(
         `UPDATE companies
-         SET subscription_tier = COALESCE($1, subscription_tier),
-             status = COALESCE($2, status),
+         SET name = COALESCE($1, name),
+             subscription_tier = COALESCE($2, subscription_tier),
+             status = COALESCE($3, status),
+             contact_person = COALESCE($4, contact_person),
+             contact_email = COALESCE($5, contact_email),
+             contact_phone = COALESCE($6, contact_phone),
+             address = COALESCE($7, address),
              updated_at = NOW()
-         WHERE id = $3
-         RETURNING id, name, subscription_tier, status, updated_at`,
-        [subscription_tier, status, id]
+         WHERE id = $8
+         RETURNING id, name, subscription_tier, status, contact_person, contact_email, contact_phone, address, updated_at`,
+        [name, subscription_tier, status, contact_person, contact_email, contact_phone, address, id]
       );
 
       if (result.rows.length === 0) {
@@ -111,6 +116,27 @@ export const companyController = {
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: 'Failed to fetch company' });
+    }
+  },
+
+  // Delete a company and all related data (Super Admin only)
+  async deleteCompany(req, res) {
+    const { id } = req.params;
+
+    try {
+      const result = await pool.query(
+        'DELETE FROM companies WHERE id = $1 RETURNING id, name',
+        [id]
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Company not found' });
+      }
+
+      res.json({ message: 'Company deleted successfully', company: result.rows[0] });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to delete company' });
     }
   },
 };

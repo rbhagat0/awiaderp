@@ -1,22 +1,26 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../lib/api';
-import { Plus, Trash2, Edit3, Mail, Phone, MapPin, Building2 } from 'lucide-react';
+import { Plus, Trash2, Edit3 } from 'lucide-react';
 
 export default function MasterAdminPage() {
   const { user } = useAuth();
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [newCompany, setNewCompany] = useState({ name: '', subscription_tier: 'starter', status: 'active' });
-  const [showForm, setShowForm] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [editingCompany, setEditingCompany] = useState(null);
-  const [editDetails, setEditDetails] = useState({
+  const [companyForm, setCompanyForm] = useState({
+    name: '',
+    subscription_tier: 'starter',
+    status: 'active',
     contact_person: '',
     contact_email: '',
     contact_phone: '',
     address: '',
   });
   const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('success');
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     if (user?.role === 'super_admin') {
@@ -46,17 +50,87 @@ export default function MasterAdminPage() {
     }
   };
 
-  const handleCreateCompany = async (e) => {
+  const openCreateModal = () => {
+    setEditingCompany(null);
+    setCompanyForm({
+      name: '',
+      subscription_tier: 'starter',
+      status: 'active',
+      contact_person: '',
+      contact_email: '',
+      contact_phone: '',
+      address: '',
+    });
+    setShowModal(true);
+  };
+
+  const openEditModal = (company) => {
+    setEditingCompany(company.id);
+    setCompanyForm({
+      name: company.name || '',
+      subscription_tier: company.subscription_tier || 'starter',
+      status: company.status || 'active',
+      contact_person: company.contact_person || '',
+      contact_email: company.contact_email || '',
+      contact_phone: company.contact_phone || '',
+      address: company.address || '',
+    });
+    setShowModal(true);
+  };
+
+  const handleSaveCompany = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/companies', newCompany);
-      setShowForm(false);
-      setNewCompany({ name: '', subscription_tier: 'starter', status: 'active' });
+      if (editingCompany) {
+        await api.patch(`/companies/${editingCompany}`, {
+          name: companyForm.name,
+          subscription_tier: companyForm.subscription_tier,
+          status: companyForm.status,
+          contact_person: companyForm.contact_person,
+          contact_email: companyForm.contact_email,
+          contact_phone: companyForm.contact_phone,
+          address: companyForm.address,
+        });
+        setMessage('Company updated successfully');
+      } else {
+        await api.post('/companies', {
+          name: companyForm.name,
+          subscription_tier: companyForm.subscription_tier,
+          status: companyForm.status,
+          contact_person: companyForm.contact_person,
+          contact_email: companyForm.contact_email,
+          contact_phone: companyForm.contact_phone,
+          address: companyForm.address,
+        });
+        setMessage('Company created successfully');
+      }
+      setShowModal(false);
+      setEditingCompany(null);
       fetchCompanies();
-      setMessage('Company created successfully');
+      setMessageType('success');
       setTimeout(() => setMessage(''), 3000);
     } catch (err) {
-      setMessage(err.response?.data?.error || 'Failed to create company');
+      setMessage(err.response?.data?.error || 'Failed to save company');
+      setMessageType('error');
+      setTimeout(() => setMessage(''), 3000);
+    }
+  };
+
+  const handleDeleteCompany = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this company? All related data (users, clients, leads, projects, tasks) will be permanently deleted.')) {
+      return;
+    }
+    setDeletingId(id);
+    try {
+      await api.delete(`/companies/${id}`);
+      setMessage('Company deleted successfully');
+      setMessageType('success');
+      fetchCompanies();
+    } catch (err) {
+      setMessage(err.response?.data?.error || 'Failed to delete company');
+      setMessageType('error');
+    } finally {
+      setDeletingId(null);
       setTimeout(() => setMessage(''), 3000);
     }
   };
@@ -67,30 +141,6 @@ export default function MasterAdminPage() {
       fetchCompanies();
     } catch (err) {
       console.error(err);
-    }
-  };
-
-  const handleEditDetails = (company) => {
-    setEditingCompany(company.id);
-    setEditDetails({
-      contact_person: company.contact_person || '',
-      contact_email: company.contact_email || '',
-      contact_phone: company.contact_phone || '',
-      address: company.address || '',
-    });
-  };
-
-  const handleSaveDetails = async (e) => {
-    e.preventDefault();
-    try {
-      await api.patch('/companies/details', editDetails);
-      setEditingCompany(null);
-      fetchCompanies();
-      setMessage('Company details updated successfully');
-      setTimeout(() => setMessage(''), 3000);
-    } catch (err) {
-      setMessage(err.response?.data?.error || 'Failed to update details');
-      setTimeout(() => setMessage(''), 3000);
     }
   };
 
@@ -107,7 +157,7 @@ export default function MasterAdminPage() {
           </p>
         </div>
         <button
-          onClick={() => setShowForm(true)}
+          onClick={openCreateModal}
           className="btn-primary flex items-center gap-2"
         >
           <Plus className="w-4 h-4" /> Add Company
@@ -115,7 +165,11 @@ export default function MasterAdminPage() {
       </div>
 
       {message && (
-        <div className="p-3 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-sm border border-green-100 dark:border-green-800/30">
+        <div className={`p-3 rounded-lg text-sm border ${
+          messageType === 'success'
+            ? 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 border-green-100 dark:border-green-800/30'
+            : 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border-red-100 dark:border-red-800/30'
+        }`}>
           {message}
         </div>
       )}
@@ -178,23 +232,21 @@ export default function MasterAdminPage() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
-                      {editingCompany === company.id ? (
-                        <button
-                          onClick={() => setEditingCompany(null)}
-                          className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-                          title="Cancel"
-                        >
-                          <Edit3 className="w-4 h-4" />
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => handleEditDetails(company)}
-                          className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg"
-                          title="Edit Details"
-                        >
-                          <Building2 className="w-4 h-4" />
-                        </button>
-                      )}
+                      <button
+                        onClick={() => openEditModal(company)}
+                        className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg"
+                        title="Edit Company"
+                      >
+                        <Edit3 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteCompany(company.id)}
+                        className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
+                        title="Delete Company"
+                        disabled={deletingId === company.id}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -204,136 +256,141 @@ export default function MasterAdminPage() {
         </div>
       )}
 
-      {showForm && (
-        <div className="glass-card p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Onboard New Company</h2>
-          <form onSubmit={handleCreateCompany} className="space-y-4 max-w-md">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Company Name
-              </label>
-              <input
-                type="text"
-                value={newCompany.name}
-                onChange={(e) => setNewCompany({ ...newCompany, name: e.target.value })}
-                className="input-field"
-                placeholder="Acme Corporation"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Subscription Tier
-              </label>
-              <select
-                value={newCompany.subscription_tier}
-                onChange={(e) => setNewCompany({ ...newCompany, subscription_tier: e.target.value })}
-                className="input-field"
-              >
-                {tierOptions.map((tier) => (
-                  <option key={tier} value={tier}>
-                    {tier.charAt(0).toUpperCase() + tier.slice(1)}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Status
-              </label>
-              <select
-                value={newCompany.status}
-                onChange={(e) => setNewCompany({ ...newCompany, status: e.target.value })}
-                className="input-field"
-              >
-                {statusOptions.map((status) => (
-                  <option key={status} value={status}>
-                    {status.charAt(0).toUpperCase() + status.slice(1)}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex gap-3 pt-4">
-              <button type="submit" className="btn-primary flex-1">Create Company</button>
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="glass-card w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                {editingCompany ? 'Edit Company' : 'Add New Company'}
+              </h2>
               <button
-                type="button"
-                onClick={() => setShowForm(false)}
-                className="btn-secondary flex-1"
+                onClick={() => setShowModal(false)}
+                className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
               >
-                Cancel
+                <Trash2 className="w-5 h-5" />
               </button>
             </div>
-          </form>
-        </div>
-      )}
 
-      {editingCompany && (
-        <div className="glass-card p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Edit Company Details</h2>
-          <form onSubmit={handleSaveDetails} className="space-y-4 max-w-md">
-            <div className="grid grid-cols-2 gap-4">
+            <form onSubmit={handleSaveCompany} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Contact Person
+                  Company Name
                 </label>
                 <input
                   type="text"
-                  value={editDetails.contact_person}
-                  onChange={(e) => setEditDetails({ ...editDetails, contact_person: e.target.value })}
+                  value={companyForm.name}
+                  onChange={(e) => setCompanyForm({ ...companyForm, name: e.target.value })}
                   className="input-field"
-                  placeholder="John Doe"
+                  placeholder="Acme Corporation"
+                  required
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Contact Email
-                </label>
-                <input
-                  type="email"
-                  value={editDetails.contact_email}
-                  onChange={(e) => setEditDetails({ ...editDetails, contact_email: e.target.value })}
-                  className="input-field"
-                  placeholder="admin@company.com"
-                />
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Subscription Tier
+                  </label>
+                  <select
+                    value={companyForm.subscription_tier}
+                    onChange={(e) => setCompanyForm({ ...companyForm, subscription_tier: e.target.value })}
+                    className="input-field"
+                  >
+                    {tierOptions.map((tier) => (
+                      <option key={tier} value={tier}>
+                        {tier.charAt(0).toUpperCase() + tier.slice(1)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Status
+                  </label>
+                  <select
+                    value={companyForm.status}
+                    onChange={(e) => setCompanyForm({ ...companyForm, status: e.target.value })}
+                    className="input-field"
+                  >
+                    {statusOptions.map((status) => (
+                      <option key={status} value={status}>
+                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Contact Phone
-                </label>
-                <input
-                  type="tel"
-                  value={editDetails.contact_phone}
-                  onChange={(e) => setEditDetails({ ...editDetails, contact_phone: e.target.value })}
-                  className="input-field"
-                  placeholder="+1 234 567 8900"
-                />
+
+              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Contact Details</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Contact Person
+                    </label>
+                    <input
+                      type="text"
+                      value={companyForm.contact_person}
+                      onChange={(e) => setCompanyForm({ ...companyForm, contact_person: e.target.value })}
+                      className="input-field"
+                      placeholder="John Doe"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Contact Email
+                    </label>
+                    <input
+                      type="email"
+                      value={companyForm.contact_email}
+                      onChange={(e) => setCompanyForm({ ...companyForm, contact_email: e.target.value })}
+                      className="input-field"
+                      placeholder="admin@company.com"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Contact Phone
+                    </label>
+                    <input
+                      type="tel"
+                      value={companyForm.contact_phone}
+                      onChange={(e) => setCompanyForm({ ...companyForm, contact_phone: e.target.value })}
+                      className="input-field"
+                      placeholder="+1 234 567 8900"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Address
+                    </label>
+                    <input
+                      type="text"
+                      value={companyForm.address}
+                      onChange={(e) => setCompanyForm({ ...companyForm, address: e.target.value })}
+                      className="input-field"
+                      placeholder="123 Business Street, City"
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Address
-                </label>
-                <input
-                  type="text"
-                  value={editDetails.address}
-                  onChange={(e) => setEditDetails({ ...editDetails, address: e.target.value })}
-                  className="input-field"
-                  placeholder="123 Business Street, City"
-                />
+
+              <div className="flex gap-3 pt-6">
+                <button type="submit" className="btn-primary flex-1" disabled={deletingId}>
+                  {editingCompany ? 'Update Company' : 'Create Company'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="btn-secondary flex-1"
+                >
+                  Cancel
+                </button>
               </div>
-            </div>
-            <div className="flex gap-3 pt-4">
-              <button type="submit" className="btn-primary flex-1">Save Details</button>
-              <button
-                type="button"
-                onClick={() => setEditingCompany(null)}
-                className="btn-secondary flex-1"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       )}
     </div>
