@@ -76,36 +76,27 @@ The `public/_redirects` file handles SPA routing:
 
 ---
 
-## Step 3: Deploy Backend to Railway (Free Tier)
+## Step 3: Deploy Backend to Render (Free Tier)
 
-### Railway Deployment
+### Render Deployment
 
-1. Log in to [Railway.app](https://railway.app/)
-2. Click **New Project** → **Deploy from GitHub repo**
-3. Select your `awiaderp` repository
-4. Add the following environment variables:
-   - `DATABASE_URL` = your Neon connection string
-   - `JWT_SECRET` = a strong random secret
+1. Log in to [Render.com](https://render.com/)
+2. Click **New** → **Web Service**
+3. Connect your GitHub repository (`rbhagat0/awiaderp`)
+4. Configure these settings:
+   - **Runtime**: Node
+   - **Root Directory**: `backend`
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+5. Add these environment variables:
+   - `DATABASE_URL` = `postgresql://neondb_owner:npg_Rc5EjWz8iNdK@ep-divine-recipe-aorvmk9o-pooler.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require`
+   - `JWT_SECRET` = `awiaderp-super-secret-jwt-key-change-in-production`
    - `JWT_EXPIRES_IN` = `7d`
    - `PORT` = `5000`
    - `NODE_ENV` = `production`
    - `FRONTEND_URL` = your Cloudflare Pages URL (e.g., `https://awiaderp-frontend.pages.dev`)
-5. Set the **root directory** to `backend`
-6. Railway will auto-detect the `start` script (`node server.js`)
-7. Deploy!
-
-### Render Deployment (Alternative)
-
-1. Log in to [Render.com](https://render.com/)
-2. Click **New** → **Web Service**
-3. Connect your GitHub repository
-4. Configure:
-   - **Runtime**: Node
-   - **Build command**: `cd backend && npm install`
-   - **Start command**: `cd backend && npm start`
-   - **Root directory**: `.` (repo root)
-5. Add environment variables (same as Railway)
-6. Deploy
+6. Click **Create Web Service**
+7. Render will deploy your backend and give you a URL like `https://awiaderp-backend.onrender.com`
 
 ---
 

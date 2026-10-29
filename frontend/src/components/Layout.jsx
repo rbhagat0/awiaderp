@@ -32,32 +32,15 @@ export default function Layout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col">
-      {/* Desktop Header */}
-      <header className="glass-card hidden md:flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
-        <div className="flex items-center gap-3">
-          <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">Awiad ERP</h1>
-          <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">{user?.company_name || 'Master Admin'}</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="hidden md:block text-sm text-gray-600 dark:text-gray-400">{user?.name}</div>
-        </div>
-      </header>
-
-      {/* Desktop + Mobile Wrapper */}
+    <div className="h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col">
+      {/* Desktop + Mobile Wrapper - full height */}
       <div className="flex flex-1 overflow-hidden relative">
-        {/* Sidebar */}
+        {/* Sidebar - covers full height */}
         <aside
-          className={`glass-card border-r shrink-0 transition-all duration-300 z-40 ${isDesktop ? '' : 'fixed inset-y-0 left-0'} ${isDesktop ? `w-64 ${sidebarCollapsed ? 'w-16' : ''}` : `${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}`}
+          className={`border-r transition-all duration-300 z-50 h-full ${isDesktop ? 'glass-card' : 'bg-white dark:bg-gray-900'} ${isDesktop ? (sidebarCollapsed ? 'w-16' : 'w-64') : 'fixed inset-y-0 left-0 w-64'} ${!isDesktop ? (sidebarOpen ? 'translate-x-0' : '-translate-x-full') : ''}`}
         >
           {/* Sidebar Header with collapse button inside */}
           <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between relative">
-            {!sidebarCollapsed && (
-              <>
-                <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">Awiad ERP</h1>
-                <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">{user?.company_name || 'Master Admin'}</span>
-              </>
-            )}
             {isDesktop && (
               <button
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
@@ -163,30 +146,34 @@ export default function Layout() {
         {/* Mobile Sidebar Overlay */}
         {!isDesktop && sidebarOpen && (
           <div
-            className="fixed inset-0 bg-black/50 z-30 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
             onClick={() => setSidebarOpen(false)}
           />
         )}
 
-        {/* Main Content */}
-        <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900">
-          {/* Mobile Header */}
-          {!isDesktop && (
-            <header className="glass-card flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
-              <button
-                onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="z-10 text-gray-600 dark:text-gray-300"
-              >
-                <Menu className="w-6 h-6" />
-              </button>
-              <h1 className="text-lg font-semibold">{user?.company_name || 'Ariad ERP'}</h1>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400">{user?.name}</span>
-              </div>
-            </header>
-          )}
+        {/* Main Content - header width adjusts dynamically with sidebar */}
+        <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 flex flex-col">
+          {/* Content Header - dynamic width based on sidebar state */}
+          <header className="glass-card flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
+            <div className="flex items-center gap-3">
+              {!isDesktop && (
+                <button
+                  onClick={() => setSidebarOpen(true)}
+                  className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors md:hidden"
+                  title="Open menu"
+                >
+                  <Menu className="w-5 h-5" />
+                </button>
+              )}
+              <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">Awiad ERP</h1>
+              <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">{user?.company_name || 'Master Admin'}</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="hidden md:block text-sm text-gray-600 dark:text-gray-400">{user?.name}</div>
+            </div>
+          </header>
 
-          <main className="p-4 md:p-6">
+          <main className="flex-1 overflow-y-auto p-4 md:p-6">
             <Outlet />
           </main>
         </div>
