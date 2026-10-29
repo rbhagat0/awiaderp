@@ -3,7 +3,7 @@ compatibility_date = "2026-10-23"
 
 [build]
 command = "npm run build"
-output = "dist"
+outputDirectory = "dist"
 
 [observability]
 enabled = true
