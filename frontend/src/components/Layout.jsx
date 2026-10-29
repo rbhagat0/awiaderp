@@ -37,7 +37,7 @@ export default function Layout() {
       <div className="flex flex-1 overflow-hidden relative">
         {/* Sidebar - covers full height */}
         <aside
-          className={`border-r border-premium-border transition-all duration-300 z-50 h-full ${isDesktop ? 'glass-card' : 'bg-premium-card/95 backdrop-blur-xl'} ${isDesktop ? (sidebarCollapsed ? 'w-20' : 'w-72') : 'fixed inset-y-0 left-0 w-72'} ${!isDesktop ? (sidebarOpen ? 'translate-x-0' : '-translate-x-full') : ''}`}
+          className={`border-r border-premium-border transition-all duration-300 z-50 h-full ${isDesktop ? 'glass-card' : 'bg-premium-card/95 backdrop-blur-xl'} ${isDesktop ? (sidebarCollapsed ? 'w-20' : 'w-72') : 'fixed inset-y-0 left-0 w-72'} ${!isDesktop ? (sidebarOpen ? 'translate-x-0' : '-translate-x-full') : ''} ${isDesktop ? 'mt-4 md:mt-6 mb-4 md:mb-6' : ''}`}
         >
           {/* Sidebar Header with collapse button inside */}
           <div className="p-5 border-b border-premium-border flex items-center justify-between relative">
@@ -184,7 +184,7 @@ export default function Layout() {
         {/* Main Content - header width adjusts dynamically with sidebar */}
         <div className="flex-1 overflow-y-auto bg-premium-dark dark:bg-premium-dark flex flex-col">
           {/* Content Header - matches main content padding */}
-          <header className={`glass-card flex items-center justify-between border-b border-premium-border sticky top-0 z-30 mx-4 md:mx-6 ${sidebarCollapsed ? 'px-4' : 'px-6'} py-4`}>
+          <header className={`glass-card flex items-center justify-between border-b border-premium-border sticky top-0 z-30 mx-4 md:mx-6 mt-4 md:mt-6 ${sidebarCollapsed ? 'px-4' : 'px-6'} py-4`}>
             <div className="flex items-center gap-3">
               {!isDesktop && (
                 <button
