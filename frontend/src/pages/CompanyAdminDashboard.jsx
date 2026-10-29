@@ -24,10 +24,10 @@ export default function CompanyAdminDashboard() {
 
   if (user?.role !== 'company_admin') {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Access Denied</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">Company Admin access required.</p>
+      <div className="min-h-screen flex items-center justify-center bg-premium-dark dark:bg-premium-dark">
+        <div className="glass-panel p-8 md:p-12 max-w-md w-full">
+          <h1 className="section-title">Access Denied</h1>
+          <p className="section-subtitle mt-2">Company Admin access required.</p>
         </div>
       </div>
     );
@@ -68,8 +68,8 @@ export default function CompanyAdminDashboard() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Company Admin</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
+          <h1 className="section-title">Company Admin</h1>
+          <p className="section-subtitle">
             Manage {company?.name || 'your company'} details and employees
           </p>
         </div>
@@ -83,24 +83,24 @@ export default function CompanyAdminDashboard() {
       </div>
 
       {loading ? (
-        <div className="text-center py-10 text-gray-500 dark:text-gray-400">
+        <div className="text-center py-12 text-premium-textMuted dark:text-premium-textMuted">
           Loading company details...
         </div>
       ) : (
         <>
         {message && (
-          <div className="p-3 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-sm border border-green-100 dark:border-green-800/30">
+          <div className="p-4 rounded-xl bg-premium-success/10 dark:bg-premium-success/10 text-premium-success dark:text-premium-success text-sm border border-premium-success/20">
             {message}
           </div>
         )}
 
         {showDetails && (
           <div className="glass-card p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Company Details</h2>
-            <form onSubmit={handleUpdateDetails} className="space-y-4 max-w-md">
+            <h2 className="text-lg font-semibold text-premium-text dark:text-premium-text mb-4">Company Details</h2>
+            <form onSubmit={handleUpdateDetails} className="space-y-5 max-w-md">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                     Contact Person
                   </label>
                   <input
@@ -112,7 +112,7 @@ export default function CompanyAdminDashboard() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                     Contact Email
                   </label>
                   <input
@@ -126,7 +126,7 @@ export default function CompanyAdminDashboard() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                     Contact Phone
                   </label>
                   <input
@@ -138,7 +138,7 @@ export default function CompanyAdminDashboard() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                     Address
                   </label>
                   <input
@@ -150,7 +150,7 @@ export default function CompanyAdminDashboard() {
                   />
                 </div>
               </div>
-              <div className="flex gap-3 pt-4">
+              <div className="flex gap-3 pt-6">
                 <button type="submit" className="btn-primary flex-1">
                   Save Details
                 </button>
@@ -170,39 +170,39 @@ export default function CompanyAdminDashboard() {
           <div className="glass-card p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Company Name</p>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white">{company?.name}</h3>
+                <p className="text-sm text-premium-textMuted dark:text-premium-textMuted">Company Name</p>
+                <h3 className="text-lg font-bold text-premium-text dark:text-premium-text">{company?.name}</h3>
               </div>
-              <Building2 className="w-8 h-8 text-blue-500 dark:text-blue-400" />
+              <Building2 className="w-8 h-8 text-premium-accent dark:text-premium-accent" />
             </div>
           </div>
 
           <div className="glass-card p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Subscription Tier</p>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                <p className="text-sm text-premium-textMuted dark:text-premium-textMuted">Subscription Tier</p>
+                <h3 className="text-lg font-bold text-premium-text dark:text-premium-text">
                   {company?.subscription_tier?.charAt(0).toUpperCase() + company?.subscription_tier?.slice(1)}
                 </h3>
               </div>
-              <LayoutGrid className="w-8 h-8 text-blue-500 dark:text-blue-400" />
+              <LayoutGrid className="w-8 h-8 text-premium-accent dark:text-premium-accent" />
             </div>
           </div>
 
           <div className="glass-card p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Status</p>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                <p className="text-sm text-premium-textMuted dark:text-premium-textMuted">Status</p>
+                <h3 className="text-lg font-bold text-premium-text dark:text-premium-text">
                   {company?.status?.charAt(0).toUpperCase() + company?.status?.slice(1)}
                 </h3>
               </div>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+              <span className={`badge ${
                 company?.status === 'active'
-                  ? 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400'
+                  ? 'badge-active'
                   : company?.status === 'suspended'
-                  ? 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400'
-                  : 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400'
+                  ? 'badge-suspended'
+                  : 'badge-trial'
               }`}>
                 {company?.status}
               </span>
@@ -211,34 +211,34 @@ export default function CompanyAdminDashboard() {
         </div>
 
         <div className="glass-card p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Contact Information</h2>
-          <div className="space-y-3">
+          <h2 className="text-lg font-semibold text-premium-text dark:text-premium-text mb-4">Contact Information</h2>
+          <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <User className="w-5 h-5 text-gray-400" />
+              <User className="w-5 h-5 text-premium-textMuted" />
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Contact Person</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{details.contact_person || 'Not set'}</p>
+                <p className="text-sm font-medium text-premium-text dark:text-premium-text">Contact Person</p>
+                <p className="text-sm text-premium-textMuted dark:text-premium-textMuted">{details.contact_person || 'Not set'}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Mail className="w-5 h-5 text-gray-400" />
+              <Mail className="w-5 h-5 text-premium-textMuted" />
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Contact Email</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{details.contact_email || 'Not set'}</p>
+                <p className="text-sm font-medium text-premium-text dark:text-premium-text">Contact Email</p>
+                <p className="text-sm text-premium-textMuted dark:text-premium-textMuted">{details.contact_email || 'Not set'}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Phone className="w-5 h-5 text-gray-400" />
+              <Phone className="w-5 h-5 text-premium-textMuted" />
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Contact Phone</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{details.contact_phone || 'Not set'}</p>
+                <p className="text-sm font-medium text-premium-text dark:text-premium-text">Contact Phone</p>
+                <p className="text-sm text-premium-textMuted dark:text-premium-textMuted">{details.contact_phone || 'Not set'}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <MapPin className="w-5 h-5 text-gray-400" />
+              <MapPin className="w-5 h-5 text-premium-textMuted" />
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Address</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{details.address || 'Not set'}</p>
+                <p className="text-sm font-medium text-premium-text dark:text-premium-text">Address</p>
+                <p className="text-sm text-premium-textMuted dark:text-premium-textMuted">{details.address || 'Not set'}</p>
               </div>
             </div>
           </div>

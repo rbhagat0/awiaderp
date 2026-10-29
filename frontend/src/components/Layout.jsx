@@ -32,19 +32,19 @@ export default function Layout() {
   };
 
   return (
-    <div className="h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col">
+    <div className="h-screen bg-premium-dark dark:bg-premium-dark text-premium-text dark:text-premium-text flex flex-col">
       {/* Desktop + Mobile Wrapper - full height */}
       <div className="flex flex-1 overflow-hidden relative">
         {/* Sidebar - covers full height */}
         <aside
-          className={`border-r transition-all duration-300 z-50 h-full ${isDesktop ? 'glass-card' : 'bg-white dark:bg-gray-900'} ${isDesktop ? (sidebarCollapsed ? 'w-16' : 'w-64') : 'fixed inset-y-0 left-0 w-64'} ${!isDesktop ? (sidebarOpen ? 'translate-x-0' : '-translate-x-full') : ''}`}
+          className={`border-r border-premium-border transition-all duration-300 z-50 h-full ${isDesktop ? 'glass-card' : 'bg-premium-card/95 backdrop-blur-xl'} ${isDesktop ? (sidebarCollapsed ? 'w-20' : 'w-72') : 'fixed inset-y-0 left-0 w-72'} ${!isDesktop ? (sidebarOpen ? 'translate-x-0' : '-translate-x-full') : ''}`}
         >
           {/* Sidebar Header with collapse button inside */}
-          <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between relative">
+          <div className="p-5 border-b border-premium-border flex items-center justify-between relative">
             {isDesktop && (
               <button
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                className="p-2.5 rounded-xl bg-white/10 dark:bg-premium-card/50 text-premium-textMuted dark:text-premium-textMuted hover:bg-white/20 dark:hover:bg-premium-card/70 transition-all"
                 title="Collapse sidebar"
               >
                 <ChevronLeft className={`w-4 h-4 ${sidebarCollapsed ? 'rotate-180' : ''}`} />
@@ -53,7 +53,7 @@ export default function Layout() {
             {!isDesktop && (
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                className="p-2.5 rounded-xl bg-white/10 dark:bg-premium-card/50 text-premium-textMuted dark:text-premium-textMuted hover:bg-white/20 dark:hover:bg-premium-card/70 transition-all"
                 title="Toggle dark mode"
               >
                 {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -65,16 +65,16 @@ export default function Layout() {
             {isSuperAdmin && (
               <>
                 {!sidebarCollapsed && (
-                  <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  <div className="px-4 py-2.5 text-[0.7rem] font-semibold text-premium-textMuted uppercase tracking-wider">
                     Super Admin
                   </div>
                 )}
                 <button
                   onClick={() => navigate('/admin')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     window.location.pathname === '/admin'
-                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      ? 'sidebar-item-active'
+                      : 'sidebar-item'
                   }`}
                 >
                   <LayoutGrid className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
@@ -86,16 +86,16 @@ export default function Layout() {
             {isCompanyAdmin && (
               <>
                 {!sidebarCollapsed && (
-                  <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4">
+                  <div className="px-4 py-2.5 text-[0.7rem] font-semibold text-premium-textMuted uppercase tracking-wider mt-6">
                     Company Admin
                   </div>
                 )}
                 <button
                   onClick={() => navigate('/company-admin')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     window.location.pathname === '/company-admin'
-                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      ? 'sidebar-item-active'
+                      : 'sidebar-item'
                   }`}
                 >
                   <Building2 className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
@@ -103,10 +103,10 @@ export default function Layout() {
                 </button>
                 <button
                   onClick={() => navigate('/employees')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     window.location.pathname === '/employees'
-                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      ? 'sidebar-item-active'
+                      : 'sidebar-item'
                   }`}
                 >
                   <User className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
@@ -116,17 +116,17 @@ export default function Layout() {
             )}
 
             {!sidebarCollapsed && (
-              <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4">
+              <div className="px-4 py-2.5 text-[0.7rem] font-semibold text-premium-textMuted uppercase tracking-wider mt-6">
                 Modules
               </div>
             )}
 
             <button
               onClick={() => navigate('/home')}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 window.location.pathname === '/home'
-                  ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  ? 'sidebar-item-active'
+                  : 'sidebar-item'
               }`}
             >
               <LayoutGrid className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
@@ -137,10 +137,10 @@ export default function Layout() {
               <>
                 <button
                   onClick={() => navigate('/sales')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     window.location.pathname === '/sales'
-                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      ? 'sidebar-item-active'
+                      : 'sidebar-item'
                   }`}
                 >
                   <ShoppingCart className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
@@ -149,10 +149,10 @@ export default function Layout() {
 
                 <button
                   onClick={() => navigate('/projects')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     window.location.pathname === '/projects'
-                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      ? 'sidebar-item-active'
+                      : 'sidebar-item'
                   }`}
                 >
                   <FolderKanban className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
@@ -162,12 +162,10 @@ export default function Layout() {
             ) : null}
           </nav>
 
-          <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="absolute bottom-0 left-0 right-0 p-5 border-t border-premium-border">
             <button
               onClick={handleLogout}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors ${
-                sidebarCollapsed ? 'justify-center' : ''
-              }`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-premium-error dark:text-premium-error hover:bg-premium-error/10 dark:hover:bg-premium-error/10 transition-all border border-premium-error/20 ${sidebarCollapsed ? 'justify-center' : ''}`}
             >
               <LogOut className="w-5 h-5" />
               {!sidebarCollapsed && <span>Sign Out</span>}
@@ -178,30 +176,30 @@ export default function Layout() {
         {/* Mobile Sidebar Overlay */}
         {!isDesktop && sidebarOpen && (
           <div
-            className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/70 z-40 backdrop-blur-md"
             onClick={() => setSidebarOpen(false)}
           />
         )}
 
         {/* Main Content - header width adjusts dynamically with sidebar */}
-        <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 flex flex-col">
+        <div className="flex-1 overflow-y-auto bg-premium-dark dark:bg-premium-dark flex flex-col">
           {/* Content Header - dynamic width based on sidebar state */}
-          <header className="glass-card flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
+          <header className="glass-card flex items-center justify-between px-6 py-4 border-b border-premium-border sticky top-0 z-30">
             <div className="flex items-center gap-3">
               {!isDesktop && (
                 <button
                   onClick={() => setSidebarOpen(true)}
-                  className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors md:hidden"
+                  className="p-2.5 rounded-xl bg-white/10 dark:bg-premium-card/50 text-premium-textMuted dark:text-premium-textMuted hover:bg-white/20 dark:hover:bg-premium-card/70 transition-all md:hidden"
                   title="Open menu"
                 >
                   <Menu className="w-5 h-5" />
                 </button>
               )}
-              <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">Awiad ERP</h1>
-              <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">{user?.company_name || 'Master Admin'}</span>
+              <h1 className="text-xl font-bold text-premium-accent dark:text-premium-accent tracking-tight">Awiad ERP</h1>
+              <span className="text-xs text-premium-textMuted dark:text-premium-textMuted ml-2 font-medium">{user?.company_name || 'Master Admin'}</span>
             </div>
             <div className="flex items-center gap-3">
-              <div className="hidden md:block text-sm text-gray-600 dark:text-gray-400">{user?.name}</div>
+              <div className="hidden md:block text-sm text-premium-textMuted dark:text-premium-textMuted font-medium">{user?.name}</div>
             </div>
           </header>
 

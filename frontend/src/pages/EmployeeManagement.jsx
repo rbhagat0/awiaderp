@@ -26,10 +26,10 @@ export default function EmployeeManagement() {
 
   if (user?.role !== 'company_admin') {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Access Denied</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">Company Admin access required.</p>
+      <div className="min-h-screen flex items-center justify-center bg-premium-dark dark:bg-premium-dark">
+        <div className="glass-panel p-8 md:p-12 max-w-md w-full">
+          <h1 className="section-title">Access Denied</h1>
+          <p className="section-subtitle mt-2">Company Admin access required.</p>
         </div>
       </div>
     );
@@ -99,8 +99,8 @@ export default function EmployeeManagement() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Employee Management</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
+          <h1 className="section-title">Employee Management</h1>
+          <p className="section-subtitle">
             Enroll and manage employees for {user?.company_name || 'your company'}
           </p>
         </div>
@@ -113,52 +113,52 @@ export default function EmployeeManagement() {
       </div>
 
       {message && (
-        <div className="p-3 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-sm border border-green-100 dark:border-green-800/30">
+        <div className="p-4 rounded-xl bg-premium-success/10 dark:bg-premium-success/10 text-premium-success dark:text-premium-success text-sm border border-premium-success/20">
           {message}
         </div>
       )}
 
       {loading ? (
-        <div className="text-center py-10 text-gray-500 dark:text-gray-400">
+        <div className="text-center py-12 text-premium-textMuted dark:text-premium-textMuted">
           Loading employees...
         </div>
       ) : (
         <div className="glass-card overflow-hidden">
-          <table className="w-full text-left border-collapse">
+          <table className="premium-table">
             <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-700">
-                <th className="px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Name</th>
-                <th className="px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Email</th>
-                <th className="px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Role</th>
-                <th className="px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Actions</th>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th className="text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
               {employees.map((emp) => (
-                <tr key={emp.id} className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                  <td className="px-6 py-4 text-gray-900 dark:text-white font-medium">{emp.name}</td>
-                  <td className="px-6 py-4 text-gray-600 dark:text-gray-300">{emp.email}</td>
-                  <td className="px-6 py-4">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                <tr key={emp.id}>
+                  <td className="font-medium">{emp.name}</td>
+                  <td className="text-premium-textMuted dark:text-premium-textMuted">{emp.email}</td>
+                  <td>
+                    <span className={`badge ${
                       emp.role === 'company_admin'
-                        ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                        ? 'badge-active'
+                        : 'badge-trial'
                     }`}>
                       {emp.role.charAt(0).toUpperCase() + emp.role.slice(1)}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
+                  <td className="text-right">
+                    <div className="flex items-center gap-2 justify-end">
                       <button
                         onClick={() => handleEdit(emp)}
-                        className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg"
+                        className="p-2.5 text-premium-accent dark:text-premium-accent hover:bg-premium-accent/10 dark:hover:bg-premium-accent/20 rounded-xl transition-all"
                         title="Edit"
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDeleteEmployee(emp.id)}
-                        className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
+                        className="p-2.5 text-premium-error dark:text-premium-error hover:bg-premium-error/10 dark:hover:bg-premium-error/20 rounded-xl transition-all"
                         title="Delete"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -169,7 +169,7 @@ export default function EmployeeManagement() {
               ))}
               {employees.length === 0 && (
                 <tr>
-                  <td colSpan="4" className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                  <td colSpan="4" className="px-6 py-8 text-center text-premium-textMuted dark:text-premium-textMuted">
                     No employees yet. Add your first employee.
                   </td>
                 </tr>
@@ -181,10 +181,10 @@ export default function EmployeeManagement() {
 
       {showForm && (
         <div className="glass-card p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Add New Employee</h2>
-          <form onSubmit={handleCreateEmployee} className="space-y-4 max-w-md">
+          <h2 className="text-lg font-semibold text-premium-text dark:text-premium-text mb-4">Add New Employee</h2>
+          <form onSubmit={handleCreateEmployee} className="space-y-5 max-w-md">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                 Full Name
               </label>
               <input
@@ -197,7 +197,7 @@ export default function EmployeeManagement() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                 Email Address
               </label>
               <input
@@ -210,7 +210,7 @@ export default function EmployeeManagement() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                 Password
               </label>
               <input
@@ -223,13 +223,13 @@ export default function EmployeeManagement() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                 Role
               </label>
               <select
                 value={newEmployee.role}
                 onChange={(e) => setNewEmployee({ ...newEmployee, role: e.target.value })}
-                className="input-field"
+                className="select-field"
               >
                 {roleOptions.map((role) => (
                   <option key={role} value={role}>
@@ -238,7 +238,7 @@ export default function EmployeeManagement() {
                 ))}
               </select>
             </div>
-            <div className="flex gap-3 pt-4">
+            <div className="flex gap-3 pt-6">
               <button type="submit" className="btn-primary flex-1">
                 Create Employee
               </button>
@@ -256,10 +256,10 @@ export default function EmployeeManagement() {
 
       {editingId && (
         <div className="glass-card p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Edit Employee</h2>
-          <form onSubmit={handleUpdateEmployee} className="space-y-4 max-w-md">
+          <h2 className="text-lg font-semibold text-premium-text dark:text-premium-text mb-4">Edit Employee</h2>
+          <form onSubmit={handleUpdateEmployee} className="space-y-5 max-w-md">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                 Full Name
               </label>
               <input
@@ -271,7 +271,7 @@ export default function EmployeeManagement() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                 Email Address
               </label>
               <input
@@ -283,13 +283,13 @@ export default function EmployeeManagement() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                 Role
               </label>
               <select
                 value={editData.role}
                 onChange={(e) => setEditData({ ...editData, role: e.target.value })}
-                className="input-field"
+                className="select-field"
               >
                 {roleOptions.map((role) => (
                   <option key={role} value={role}>
@@ -298,7 +298,7 @@ export default function EmployeeManagement() {
                 ))}
               </select>
             </div>
-            <div className="flex gap-3 pt-4">
+            <div className="flex gap-3 pt-6">
               <button type="submit" className="btn-primary flex-1">
                 Save Changes
               </button>

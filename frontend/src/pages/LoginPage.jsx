@@ -47,17 +47,17 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
-      <div className="w-full max-w-md glass-card p-8">
+    <div className="min-h-screen flex items-center justify-center bg-premium-dark dark:bg-premium-dark px-4">
+      <div className="w-full max-w-md glass-modal p-8">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-600 dark:bg-blue-500 rounded-lg mb-4">
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-premium-accent dark:bg-premium-accent rounded-xl mb-4 shadow-premium">
             <ShieldAlert className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome back</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">Sign in to your Awiad ERP account</p>
+          <h1 className="section-title">Welcome back</h1>
+          <p className="section-subtitle mt-2">Sign in to your Awiad ERP account</p>
           <button
             onClick={toggleTheme}
-            className="mt-4 p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+            className="mt-4 p-2.5 rounded-xl bg-white/10 dark:bg-premium-card/50 text-premium-textMuted dark:text-premium-textMuted hover:bg-white/20 dark:hover:bg-premium-card/70 transition-all"
             title="Toggle dark mode"
           >
             {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -65,18 +65,18 @@ export default function LoginPage() {
         </div>
 
         {error && (
-          <div className="mb-6 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm border border-red-100 dark:border-red-800/30">
+          <div className="mb-6 p-3 rounded-xl bg-premium-error/10 dark:bg-premium-error/10 text-premium-error dark:text-premium-error text-sm border border-premium-error/20">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
               Email Address
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-premium-textMuted" />
               <input
                 type="email"
                 value={email}
@@ -89,11 +89,11 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
               Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-premium-textMuted" />
               <input
                 type="password"
                 value={password}
@@ -127,7 +127,7 @@ export default function LoginPage() {
         </form>
 
         <div className="mt-8 text-center">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-premium-textMuted dark:text-premium-textMuted">
             Super Admin: superadmin@awiaderp.com / admin123
           </p>
         </div>

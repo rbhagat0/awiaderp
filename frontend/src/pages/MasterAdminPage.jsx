@@ -33,10 +33,10 @@ export default function MasterAdminPage() {
 
   if (user?.role !== 'super_admin') {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Access Denied</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">Super Admin access required.</p>
+      <div className="min-h-screen flex items-center justify-center bg-premium-dark dark:bg-premium-dark">
+        <div className="glass-panel p-8 md:p-12 max-w-md w-full">
+          <h1 className="section-title">Access Denied</h1>
+          <p className="section-subtitle mt-2">Super Admin access required.</p>
         </div>
       </div>
     );
@@ -163,8 +163,8 @@ export default function MasterAdminPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Master Admin</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
+          <h1 className="section-title">Master Admin</h1>
+          <p className="section-subtitle">
             Manage onboarded companies and subscription tiers
           </p>
         </div>
@@ -177,39 +177,39 @@ export default function MasterAdminPage() {
       </div>
 
       {message && (
-        <div className={`p-3 rounded-lg text-sm border ${
+        <div className={`p-4 rounded-xl text-sm border ${
           messageType === 'success'
-            ? 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 border-green-100 dark:border-green-800/30'
-            : 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border-red-100 dark:border-red-800/30'
+            ? 'bg-premium-success/10 dark:bg-premium-success/10 text-premium-success dark:text-premium-success border-premium-success/20'
+            : 'bg-premium-error/10 dark:bg-premium-error/10 text-premium-error dark:text-premium-error border-premium-error/20'
         }`}>
           {message}
         </div>
       )}
 
       {loading ? (
-        <div className="text-center py-10 text-gray-500 dark:text-gray-400">
+        <div className="text-center py-12 text-premium-textMuted dark:text-premium-textMuted">
           Loading companies...
         </div>
       ) : (
         <div className="glass-card overflow-hidden">
-          <table className="w-full text-left border-collapse">
+          <table className="premium-table">
             <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-700">
-                <th className="px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Company Name</th>
-                <th className="px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Tier</th>
-                <th className="px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Status</th>
-                <th className="px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Actions</th>
+              <tr>
+                <th>Company Name</th>
+                <th>Tier</th>
+                <th>Status</th>
+                <th className="text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
               {companies.map((company) => (
-                <tr key={company.id} className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                  <td className="px-6 py-4 text-gray-900 dark:text-white font-medium">{company.name}</td>
-                  <td className="px-6 py-4">
+                <tr key={company.id}>
+                  <td className="font-medium">{company.name}</td>
+                  <td>
                     <select
                       value={company.subscription_tier}
                       onChange={(e) => handleUpdateCompany(company.id, e.target.value, company.status)}
-                      className="text-sm bg-transparent border-none text-gray-600 dark:text-gray-300 focus:ring-0"
+                      className="select-field text-sm"
                     >
                       {tierOptions.map((tier) => (
                         <option key={tier} value={tier}>
@@ -218,11 +218,11 @@ export default function MasterAdminPage() {
                       ))}
                     </select>
                   </td>
-                  <td className="px-6 py-4">
+                  <td>
                     <select
                       value={company.status}
                       onChange={(e) => handleUpdateCompany(company.id, company.subscription_tier, e.target.value)}
-                      className="text-sm bg-transparent border-none text-gray-600 dark:text-gray-300 focus:ring-0"
+                      className="select-field text-sm"
                     >
                       {statusOptions.map((status) => (
                         <option key={status} value={status}>
@@ -231,29 +231,29 @@ export default function MasterAdminPage() {
                       ))}
                     </select>
                   </td>
-                  <td className="px-6 py-4">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  <td>
+                    <span className={`badge ${
                       company.status === 'active'
-                        ? 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400'
+                        ? 'badge-active'
                         : company.status === 'suspended'
-                        ? 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400'
-                        : 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400'
+                        ? 'badge-suspended'
+                        : 'badge-trial'
                     }`}>
                       {company.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
+                  <td className="text-right">
+                    <div className="flex items-center gap-2 justify-end">
                       <button
                         onClick={() => openEditModal(company)}
-                        className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg"
+                        className="p-2.5 text-premium-accent dark:text-premium-accent hover:bg-premium-accent/10 dark:hover:bg-premium-accent/20 rounded-xl transition-all"
                         title="Edit Company"
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDeleteCompany(company.id)}
-                        className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
+                        className="p-2.5 text-premium-error dark:text-premium-error hover:bg-premium-error/10 dark:hover:bg-premium-error/20 rounded-xl transition-all"
                         title="Delete Company"
                         disabled={deletingId === company.id}
                       >
@@ -269,23 +269,23 @@ export default function MasterAdminPage() {
       )}
 
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="glass-card w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="modal-overlay">
+          <div className="glass-modal w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-lg font-semibold text-premium-text dark:text-premium-text">
                 {editingCompany ? 'Edit Company' : 'Add New Company'}
               </h2>
               <button
                 onClick={() => setShowModal(false)}
-                className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                className="p-2.5 text-premium-textMuted dark:text-premium-textMuted hover:bg-white/20 dark:hover:bg-premium-card/30 rounded-xl transition-all"
               >
                 <Trash2 className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSaveCompany} className="space-y-4">
+            <form onSubmit={handleSaveCompany} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                   Company Name
                 </label>
                 <input
@@ -300,13 +300,13 @@ export default function MasterAdminPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                     Subscription Tier
                   </label>
                   <select
                     value={companyForm.subscription_tier}
                     onChange={(e) => setCompanyForm({ ...companyForm, subscription_tier: e.target.value })}
-                    className="input-field"
+                    className="select-field"
                   >
                     {tierOptions.map((tier) => (
                       <option key={tier} value={tier}>
@@ -316,13 +316,13 @@ export default function MasterAdminPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                     Status
                   </label>
                   <select
                     value={companyForm.status}
                     onChange={(e) => setCompanyForm({ ...companyForm, status: e.target.value })}
-                    className="input-field"
+                    className="select-field"
                   >
                     {statusOptions.map((status) => (
                       <option key={status} value={status}>
@@ -333,11 +333,11 @@ export default function MasterAdminPage() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Contact Details</h3>
+              <div className="pt-5 border-t border-premium-border">
+                <h3 className="text-sm font-semibold text-premium-text dark:text-premium-text mb-3">Contact Details</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                       Contact Person
                     </label>
                     <input
@@ -349,7 +349,7 @@ export default function MasterAdminPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                       Contact Email
                     </label>
                     <input
@@ -363,7 +363,7 @@ export default function MasterAdminPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4 mt-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                       Contact Phone
                     </label>
                     <input
@@ -375,7 +375,7 @@ export default function MasterAdminPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                       Address
                     </label>
                     <input
@@ -390,14 +390,14 @@ export default function MasterAdminPage() {
               </div>
 
               {!editingCompany && (
-                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Company Admin Login Credentials</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                <div className="pt-5 border-t border-premium-border">
+                  <h3 className="text-sm font-semibold text-premium-text dark:text-premium-text mb-3">Company Admin Login Credentials</h3>
+                  <p className="text-sm text-premium-textMuted dark:text-premium-textMuted mb-4">
                     These credentials will be used by the company admin to log in and manage their company.
                   </p>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                         Admin Full Name
                       </label>
                       <input
@@ -410,7 +410,7 @@ export default function MasterAdminPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                         Admin Email
                       </label>
                       <input
@@ -424,7 +424,7 @@ export default function MasterAdminPage() {
                     </div>
                   </div>
                   <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
                       Admin Password
                     </label>
                     <input
