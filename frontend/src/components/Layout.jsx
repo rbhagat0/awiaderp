@@ -33,7 +33,7 @@ export default function Layout() {
       )}
 
       {/* Sidebar */}
-      <aside className="glass-card fixed inset-y-0 left-0 z-50 w-64 border-r transform transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:relative md:shadow-none">
+      <aside className={`glass-card fixed inset-y-0 left-0 z-50 w-64 border-r transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:shadow-none`}>
         <div className="p-6 border-b border-gray-200 dark:border-gray-700">
           <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">Awiad ERP</h1>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
