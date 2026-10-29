@@ -78,7 +78,7 @@ export default function Layout() {
                       : 'sidebar-item'
                   }`}
                 >
-                  <LayoutGrid className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
+                  <LayoutGrid className={`w-4 h-4 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
                   {!sidebarCollapsed && <span>Master Admin</span>}
                 </button>
               </>
@@ -99,7 +99,7 @@ export default function Layout() {
                       : 'sidebar-item'
                   }`}
                 >
-                  <Building2 className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
+                  <Building2 className={`w-4 h-4 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
                   {!sidebarCollapsed && <span>Company Dashboard</span>}
                 </button>
                 <button
@@ -110,7 +110,7 @@ export default function Layout() {
                       : 'sidebar-item'
                   }`}
                 >
-                  <User className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
+                  <User className={`w-4 h-4 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
                   {!sidebarCollapsed && <span>Employees</span>}
                 </button>
               </>
@@ -130,7 +130,7 @@ export default function Layout() {
                   : 'sidebar-item'
               }`}
             >
-              <LayoutGrid className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
+              <LayoutGrid className={`w-4 h-4 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
               {!sidebarCollapsed && <span>Home Hub</span>}
             </button>
 
@@ -144,7 +144,7 @@ export default function Layout() {
                       : 'sidebar-item'
                   }`}
                 >
-                  <ShoppingCart className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
+                  <ShoppingCart className={`w-4 h-4 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
                   {!sidebarCollapsed && <span>Sales</span>}
                 </button>
 
@@ -156,7 +156,7 @@ export default function Layout() {
                       : 'sidebar-item'
                   }`}
                 >
-                  <FolderKanban className={`w-5 h-5 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
+                  <FolderKanban className={`w-4 h-4 ${sidebarCollapsed ? 'mx-auto' : ''}`} />
                   {!sidebarCollapsed && <span>Projects</span>}
                 </button>
               </>
@@ -172,7 +172,6 @@ export default function Layout() {
               {!sidebarCollapsed && <span>Sign Out</span>}
             </button>
           </div>
-        </div>
         </aside>
         {!isDesktop && sidebarOpen && (
           <div
