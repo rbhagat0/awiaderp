@@ -1,7 +1,7 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LayoutGrid, ShoppingCart, FolderKanban, LogOut, Menu, ChevronLeft, Sun, Moon } from 'lucide-react';
 
 export default function Layout() {
@@ -10,6 +10,14 @@ export default function Layout() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(true);
+
+  useEffect(() => {
+    setIsDesktop(window.innerWidth >= 768);
+    const handleResize = () => setIsDesktop(window.innerWidth >= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Wait for auth to load before rendering
   if (loading) return null;
@@ -22,8 +30,6 @@ export default function Layout() {
     logout();
     navigate('/login');
   };
-
-  const isDesktop = window.innerWidth >= 768;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col">
@@ -42,37 +48,38 @@ export default function Layout() {
       <div className="flex flex-1 overflow-hidden relative">
         {/* Sidebar */}
         <aside
-          className={`glass-card border-r shrink-0 transition-all duration-300 z-40 ${
+          className={`glass-card border-r shrink-0 transition-all duration-300 z-40 fixed inset-y-0 left-0 ${
             isDesktop
-              ? `w-64 ${sidebarCollapsed ? 'w-16' : ''} fixed inset-y-0 left-0`
-              : `w-64 fixed inset-y-0 left-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`
+              ? `w-64 ${sidebarCollapsed ? 'w-16' : ''}`
+              : `${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`
           }`}
         >
-          {/* Collapse toggle (desktop only) */}
-          {isDesktop && (
-            <button
-              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              className="absolute top-4 right-0 -mr-8 p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors z-10"
-              title="Collapse sidebar"
-            >
-              <ChevronLeft className={`w-4 h-4 ${sidebarCollapsed ? 'rotate-180' : ''}`} />
-            </button>
-          )}
-
-          <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+          {/* Sidebar Header with collapse button inside */}
+          <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between relative">
             {!sidebarCollapsed && (
               <>
                 <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">Awiad ERP</h1>
                 <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">{user?.company_name || 'Master Admin'}</span>
               </>
             )}
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-              title="Toggle dark mode"
-            >
-              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </button>
+            {isDesktop && (
+              <button
+                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                title="Collapse sidebar"
+              >
+                <ChevronLeft className={`w-4 h-4 ${sidebarCollapsed ? 'rotate-180' : ''}`} />
+              </button>
+            )}
+            {!isDesktop && (
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                title="Toggle dark mode"
+              >
+                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+            )}
           </div>
 
           <nav className="p-2 space-y-1">
@@ -169,10 +176,10 @@ export default function Layout() {
         <div className={`flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 transition-all duration-300 ${isDesktop ? (sidebarCollapsed ? 'pl-16' : 'pl-64') : ''}`}>
           {/* Mobile Header */}
           {!isDesktop && (
-            <header className="glass-card flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
+            <header className="glass-card flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="text-gray-600 dark:text-gray-300"
+                className="z-10 text-gray-600 dark:text-gray-300"
               >
                 <Menu className="w-6 h-6" />
               </button>
