@@ -63,15 +63,15 @@
 @layer components {
   /* Premium glass morphism cards */
   .glass-card {
-    @apply bg-white/70 dark:bg-premium-card/80 backdrop-blur-md border border-white/30 dark:border-premium-border rounded-2xl shadow-premium;
+    @apply bg-white/70 dark:bg-premium-card backdrop-blur-md border border-white/30 dark:border-premium-border rounded-2xl shadow-premium;
   }
 
   .glass-panel {
-    @apply bg-white/60 dark:bg-premium-card/70 backdrop-blur-lg border border-white/20 dark:border-premium-border rounded-3xl shadow-premium-lg;
+    @apply bg-white/60 dark:bg-premium-card backdrop-blur-lg border border-white/20 dark:border-premium-border rounded-3xl shadow-premium-lg;
   }
 
   .glass-modal {
-    @apply bg-white/90 dark:bg-premium-card/95 backdrop-blur-xl border border-white/40 dark:border-premium-border rounded-3xl shadow-premium-lg;
+    @apply bg-white/90 dark:bg-premium-card backdrop-blur-xl border border-white/40 dark:border-premium-border rounded-3xl shadow-premium-lg;
   }
 
   /* Premium buttons */
