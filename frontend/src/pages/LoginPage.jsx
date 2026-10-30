@@ -47,17 +47,17 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-premium-dark dark:bg-premium-dark px-4">
+    <div className="min-h-screen flex items-center justify-center bg-premium-dark px-4">
       <div className="w-full max-w-md glass-modal p-8">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-premium-accent dark:bg-premium-accent rounded-xl mb-4 shadow-premium">
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-premium-accent rounded-xl mb-4 shadow-premium">
             <ShieldAlert className="w-6 h-6 text-white" />
           </div>
           <h1 className="section-title">Welcome back</h1>
           <p className="section-subtitle mt-2">Sign in to your Awiad ERP account</p>
           <button
             onClick={toggleTheme}
-            className="mt-4 p-2.5 rounded-xl bg-white/10 dark:bg-premium-card/50 text-premium-textMuted dark:text-premium-textMuted hover:bg-white/20 dark:hover:bg-premium-card/70 transition-all"
+            className="mt-4 p-2.5 rounded-xl bg-[var(--premium-card)]/10 text-premium-textMuted hover:bg-[var(--premium-card)]/20 transition-all"
             title="Toggle dark mode"
           >
             {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -65,14 +65,14 @@ export default function LoginPage() {
         </div>
 
         {error && (
-          <div className="mb-6 p-3 rounded-xl bg-premium-error/10 dark:bg-premium-error/10 text-premium-error dark:text-premium-error text-sm border border-premium-error/20">
+          <div className="mb-6 p-3 rounded-xl bg-premium-error/10 text-premium-error text-sm border border-premium-error/20">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+            <label className="block text-sm font-medium text-premium-textMuted mb-2">
               Email Address
             </label>
             <div className="relative">
@@ -89,7 +89,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+            <label className="block text-sm font-medium text-premium-textMuted mb-2">
               Password
             </label>
             <div className="relative">
@@ -127,7 +127,7 @@ export default function LoginPage() {
         </form>
 
         <div className="mt-8 text-center">
-          <p className="text-sm text-premium-textMuted dark:text-premium-textMuted">
+          <p className="text-sm text-premium-textMuted">
             Super Admin: superadmin@awiaderp.com / admin123
           </p>
         </div>

@@ -33,7 +33,7 @@ export default function MasterAdminPage() {
 
   if (user?.role !== 'super_admin') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-premium-dark dark:bg-premium-dark">
+      <div className="min-h-screen flex items-center justify-center bg-premium-dark">
         <div className="glass-panel p-8 md:p-12 max-w-md w-full">
           <h1 className="section-title">Access Denied</h1>
           <p className="section-subtitle mt-2">Super Admin access required.</p>
@@ -179,15 +179,15 @@ export default function MasterAdminPage() {
       {message && (
         <div className={`p-4 rounded-xl text-sm border ${
           messageType === 'success'
-            ? 'bg-premium-success/10 dark:bg-premium-success/10 text-premium-success dark:text-premium-success border-premium-success/20'
-            : 'bg-premium-error/10 dark:bg-premium-error/10 text-premium-error dark:text-premium-error border-premium-error/20'
+            ? 'bg-premium-success/10 text-premium-success border-premium-success/20'
+            : 'bg-premium-error/10 text-premium-error border-premium-error/20'
         }`}>
           {message}
         </div>
       )}
 
       {loading ? (
-        <div className="text-center py-12 text-premium-textMuted dark:text-premium-textMuted">
+        <div className="text-center py-12 text-premium-textMuted">
           Loading companies...
         </div>
       ) : (
@@ -246,14 +246,14 @@ export default function MasterAdminPage() {
                     <div className="flex items-center gap-2 justify-end">
                       <button
                         onClick={() => openEditModal(company)}
-                        className="p-2.5 text-premium-accent dark:text-premium-accent hover:bg-premium-accent/10 dark:hover:bg-premium-accent/20 rounded-xl transition-all"
+                        className="p-2.5 text-premium-accent hover:bg-premium-accent/10 rounded-xl transition-all"
                         title="Edit Company"
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDeleteCompany(company.id)}
-                        className="p-2.5 text-premium-error dark:text-premium-error hover:bg-premium-error/10 dark:hover:bg-premium-error/20 rounded-xl transition-all"
+                        className="p-2.5 text-premium-error hover:bg-premium-error/10 rounded-xl transition-all"
                         title="Delete Company"
                         disabled={deletingId === company.id}
                       >
@@ -272,12 +272,12 @@ export default function MasterAdminPage() {
         <div className="modal-overlay">
           <div className="glass-modal w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-premium-text dark:text-premium-text">
+              <h2 className="text-lg font-semibold text-premium-text">
                 {editingCompany ? 'Edit Company' : 'Add New Company'}
               </h2>
               <button
                 onClick={() => setShowModal(false)}
-                className="p-2.5 text-premium-textMuted dark:text-premium-textMuted hover:bg-white/20 dark:hover:bg-premium-card/30 rounded-xl transition-all"
+                className="p-2.5 text-premium-textMuted hover:bg-[var(--premium-card)]/30 rounded-xl transition-all"
               >
                 <Trash2 className="w-5 h-5" />
               </button>
@@ -285,7 +285,7 @@ export default function MasterAdminPage() {
 
             <form onSubmit={handleSaveCompany} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+                <label className="block text-sm font-medium text-premium-textMuted mb-2">
                   Company Name
                 </label>
                 <input
@@ -300,7 +300,7 @@ export default function MasterAdminPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+                  <label className="block text-sm font-medium text-premium-textMuted mb-2">
                     Subscription Tier
                   </label>
                   <select
@@ -316,7 +316,7 @@ export default function MasterAdminPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+                  <label className="block text-sm font-medium text-premium-textMuted mb-2">
                     Status
                   </label>
                   <select
@@ -334,10 +334,10 @@ export default function MasterAdminPage() {
               </div>
 
               <div className="pt-5 border-t border-premium-border">
-                <h3 className="text-sm font-semibold text-premium-text dark:text-premium-text mb-3">Contact Details</h3>
+                <h3 className="text-sm font-semibold text-premium-text mb-3">Contact Details</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+                    <label className="block text-sm font-medium text-premium-textMuted mb-2">
                       Contact Person
                     </label>
                     <input
@@ -349,7 +349,7 @@ export default function MasterAdminPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+                    <label className="block text-sm font-medium text-premium-textMuted mb-2">
                       Contact Email
                     </label>
                     <input
@@ -363,7 +363,7 @@ export default function MasterAdminPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4 mt-4">
                   <div>
-                    <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+                    <label className="block text-sm font-medium text-premium-textMuted mb-2">
                       Contact Phone
                     </label>
                     <input
@@ -375,7 +375,7 @@ export default function MasterAdminPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+                    <label className="block text-sm font-medium text-premium-textMuted mb-2">
                       Address
                     </label>
                     <input
@@ -391,13 +391,13 @@ export default function MasterAdminPage() {
 
               {!editingCompany && (
                 <div className="pt-5 border-t border-premium-border">
-                  <h3 className="text-sm font-semibold text-premium-text dark:text-premium-text mb-3">Company Admin Login Credentials</h3>
-                  <p className="text-sm text-premium-textMuted dark:text-premium-textMuted mb-4">
+                  <h3 className="text-sm font-semibold text-premium-text mb-3">Company Admin Login Credentials</h3>
+                  <p className="text-sm text-premium-textMuted mb-4">
                     These credentials will be used by the company admin to log in and manage their company.
                   </p>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+                      <label className="block text-sm font-medium text-premium-textMuted mb-2">
                         Admin Full Name
                       </label>
                       <input
@@ -410,7 +410,7 @@ export default function MasterAdminPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+                      <label className="block text-sm font-medium text-premium-textMuted mb-2">
                         Admin Email
                       </label>
                       <input
@@ -424,7 +424,7 @@ export default function MasterAdminPage() {
                     </div>
                   </div>
                   <div className="mt-4">
-                    <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+                    <label className="block text-sm font-medium text-premium-textMuted mb-2">
                       Admin Password
                     </label>
                     <input

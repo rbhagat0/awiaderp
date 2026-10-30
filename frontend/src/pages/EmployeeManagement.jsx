@@ -26,7 +26,7 @@ export default function EmployeeManagement() {
 
   if (user?.role !== 'company_admin') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-premium-dark dark:bg-premium-dark">
+      <div className="min-h-screen flex items-center justify-center bg-premium-dark">
         <div className="glass-panel p-8 md:p-12 max-w-md w-full">
           <h1 className="section-title">Access Denied</h1>
           <p className="section-subtitle mt-2">Company Admin access required.</p>
@@ -113,13 +113,13 @@ export default function EmployeeManagement() {
       </div>
 
       {message && (
-        <div className="p-4 rounded-xl bg-premium-success/10 dark:bg-premium-success/10 text-premium-success dark:text-premium-success text-sm border border-premium-success/20">
+        <div className="p-4 rounded-xl bg-premium-success/10 text-premium-success text-sm border border-premium-success/20">
           {message}
         </div>
       )}
 
       {loading ? (
-        <div className="text-center py-12 text-premium-textMuted dark:text-premium-textMuted">
+        <div className="text-center py-12 text-premium-textMuted">
           Loading employees...
         </div>
       ) : (
@@ -137,7 +137,7 @@ export default function EmployeeManagement() {
               {employees.map((emp) => (
                 <tr key={emp.id}>
                   <td className="font-medium">{emp.name}</td>
-                  <td className="text-premium-textMuted dark:text-premium-textMuted">{emp.email}</td>
+                  <td className="text-premium-textMuted">{emp.email}</td>
                   <td>
                     <span className={`badge ${
                       emp.role === 'company_admin'
@@ -151,14 +151,14 @@ export default function EmployeeManagement() {
                     <div className="flex items-center gap-2 justify-end">
                       <button
                         onClick={() => handleEdit(emp)}
-                        className="p-2.5 text-premium-accent dark:text-premium-accent hover:bg-premium-accent/10 dark:hover:bg-premium-accent/20 rounded-xl transition-all"
+                        className="p-2.5 text-premium-accent hover:bg-premium-accent/10 rounded-xl transition-all"
                         title="Edit"
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDeleteEmployee(emp.id)}
-                        className="p-2.5 text-premium-error dark:text-premium-error hover:bg-premium-error/10 dark:hover:bg-premium-error/20 rounded-xl transition-all"
+                        className="p-2.5 text-premium-error hover:bg-premium-error/10 rounded-xl transition-all"
                         title="Delete"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -169,7 +169,7 @@ export default function EmployeeManagement() {
               ))}
               {employees.length === 0 && (
                 <tr>
-                  <td colSpan="4" className="px-6 py-8 text-center text-premium-textMuted dark:text-premium-textMuted">
+                  <td colSpan="4" className="px-6 py-8 text-center text-premium-textMuted">
                     No employees yet. Add your first employee.
                   </td>
                 </tr>
@@ -181,10 +181,10 @@ export default function EmployeeManagement() {
 
       {showForm && (
         <div className="glass-card p-6">
-          <h2 className="text-lg font-semibold text-premium-text dark:text-premium-text mb-4">Add New Employee</h2>
+          <h2 className="text-lg font-semibold text-premium-text mb-4">Add New Employee</h2>
           <form onSubmit={handleCreateEmployee} className="space-y-5 max-w-md">
             <div>
-              <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+              <label className="block text-sm font-medium text-premium-textMuted mb-2">
                 Full Name
               </label>
               <input
@@ -197,7 +197,7 @@ export default function EmployeeManagement() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+              <label className="block text-sm font-medium text-premium-textMuted mb-2">
                 Email Address
               </label>
               <input
@@ -210,7 +210,7 @@ export default function EmployeeManagement() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+              <label className="block text-sm font-medium text-premium-textMuted mb-2">
                 Password
               </label>
               <input
@@ -223,7 +223,7 @@ export default function EmployeeManagement() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+              <label className="block text-sm font-medium text-premium-textMuted mb-2">
                 Role
               </label>
               <select
@@ -256,10 +256,10 @@ export default function EmployeeManagement() {
 
       {editingId && (
         <div className="glass-card p-6">
-          <h2 className="text-lg font-semibold text-premium-text dark:text-premium-text mb-4">Edit Employee</h2>
+          <h2 className="text-lg font-semibold text-premium-text mb-4">Edit Employee</h2>
           <form onSubmit={handleUpdateEmployee} className="space-y-5 max-w-md">
             <div>
-              <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+              <label className="block text-sm font-medium text-premium-textMuted mb-2">
                 Full Name
               </label>
               <input
@@ -271,7 +271,7 @@ export default function EmployeeManagement() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+              <label className="block text-sm font-medium text-premium-textMuted mb-2">
                 Email Address
               </label>
               <input
@@ -283,7 +283,7 @@ export default function EmployeeManagement() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-premium-textMuted dark:text-premium-textMuted mb-2">
+              <label className="block text-sm font-medium text-premium-textMuted mb-2">
                 Role
               </label>
               <select
