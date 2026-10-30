@@ -32,20 +32,24 @@ export default function Layout() {
   };
 
   return (
-    <div className="h-screen bg-premium-dark dark:bg-premium-dark text-premium-text dark:text-premium-text flex flex-col">
+    <div className="h-screen bg-premium-dark text-premium-text flex flex-col">
       {/* Desktop + Mobile Wrapper - full height */}
       <div className="flex flex-1 overflow-hidden relative items-start">
-        {/* Sidebar - covers full height */}
+        
+        {/* Sidebar - Floating Card on Desktop, Edge-attached Drawer on Mobile */}
         <aside
-          className={`border-r border-premium-border transition-all duration-300 z-50 h-full ${isDesktop ? 'glass-card' : 'bg-premium-card/95 backdrop-blur-xl'} ${isDesktop ? (sidebarCollapsed ? 'w-20' : 'w-72') : 'fixed inset-y-0 left-0 w-72'} ${!isDesktop ? (sidebarOpen ? 'translate-x-0' : '-translate-x-full') : ''}`}
+          className={`transition-all duration-300 z-50 flex flex-col overflow-hidden ${
+            isDesktop 
+              ? `glass-card my-4 ml-4 md:my-6 md:ml-6 rounded-2xl border border-premium-border h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] ${sidebarCollapsed ? 'w-20' : 'w-72'}`
+              : `fixed inset-y-0 left-0 h-full w-72 bg-premium-card/95 backdrop-blur-xl border-r border-premium-border ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`
+          }`}
         >
-          <div className={`h-full flex flex-col ${isDesktop ? 'p-4 md:p-6' : ''}`}>
-            {/* Sidebar Header with collapse button inside */}
-            <div className="p-5 border-b border-premium-border flex items-center justify-between relative">
+          {/* Sidebar Header with collapse button inside */}
+          <div className="p-5 border-b border-premium-border flex items-center justify-between relative">
             {isDesktop && (
               <button
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="p-2.5 rounded-xl bg-white/10 dark:bg-premium-card/50 text-premium-textMuted dark:text-premium-textMuted hover:bg-white/20 dark:hover:bg-premium-card/70 transition-all"
+                className="p-2.5 rounded-xl bg-[var(--premium-card)]/10 text-[var(--premium-textMuted)] hover:bg-[var(--premium-card)]/20 transition-all"
                 title="Collapse sidebar"
               >
                 <ChevronLeft className={`w-4 h-4 ${sidebarCollapsed ? 'rotate-180' : ''}`} />
@@ -54,7 +58,7 @@ export default function Layout() {
             {!isDesktop && (
               <button
                 onClick={toggleTheme}
-                className="p-2.5 rounded-xl bg-white/10 dark:bg-premium-card/50 text-premium-textMuted dark:text-premium-textMuted hover:bg-white/20 dark:hover:bg-premium-card/70 transition-all"
+                className="p-2.5 rounded-xl bg-[var(--premium-card)]/10 text-[var(--premium-textMuted)] hover:bg-[var(--premium-card)]/20 transition-all"
                 title="Toggle dark mode"
               >
                 {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -62,7 +66,7 @@ export default function Layout() {
             )}
           </div>
 
-          <nav className="p-2 space-y-1">
+          <nav className="p-2 space-y-1 flex-1 overflow-y-auto mb-20">
             {isSuperAdmin && (
               <>
                 {!sidebarCollapsed && (
@@ -163,17 +167,18 @@ export default function Layout() {
             ) : null}
           </nav>
 
-          <div className="absolute bottom-0 left-0 right-0 p-5 border-t border-premium-border">
+          <div className="absolute bottom-0 left-0 right-0 p-5 border-t border-premium-border bg-inherit">
             <button
               onClick={handleLogout}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-premium-error dark:text-premium-error hover:bg-premium-error/10 dark:hover:bg-premium-error/10 transition-all border border-premium-error/20 ${sidebarCollapsed ? 'justify-center' : ''}`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-premium-error hover:bg-premium-error/10 transition-all border border-premium-error/20 ${sidebarCollapsed ? 'justify-center' : ''}`}
             >
               <LogOut className="w-5 h-5" />
               {!sidebarCollapsed && <span>Sign Out</span>}
             </button>
           </div>
-        </div>
         </aside>
+
+        {/* Mobile Backdrop */}
         {!isDesktop && sidebarOpen && (
           <div
             className="fixed inset-0 bg-black/70 z-40 backdrop-blur-md"
@@ -181,29 +186,31 @@ export default function Layout() {
           />
         )}
 
-        {/* Main Content - header width adjusts dynamically with sidebar */}
-        <div className="flex-1 overflow-y-auto bg-premium-dark dark:bg-premium-dark flex flex-col">
-          {/* Content Header - matches main content padding */}
-          <header className={`glass-card flex items-center justify-between border-b border-premium-border sticky top-0 z-30 mx-4 md:mx-6 mt-4 md:mt-6 ${sidebarCollapsed ? 'px-4' : 'px-6'} py-4`}>
+        {/* Main Content Area */}
+        <div className="flex-1 overflow-y-auto h-full bg-premium-dark flex flex-col">
+          {/* Content Header */}
+          <header className={`glass-card flex items-center justify-between border-b border-premium-border sticky top-0 z-30 mx-4 md:mx-6 mt-4 md:mt-6 ${sidebarCollapsed ? 'px-4' : 'px-6'} py-4 rounded-2xl`}>
             <div className="flex items-center gap-3">
               {!isDesktop && (
                 <button
                   onClick={() => setSidebarOpen(true)}
-                  className="p-2.5 rounded-xl bg-white/10 dark:bg-premium-card/50 text-premium-textMuted dark:text-premium-textMuted hover:bg-white/20 dark:hover:bg-premium-card/70 transition-all md:hidden"
+                  className="p-2.5 rounded-xl bg-[var(--premium-card)]/10 text-[var(--premium-textMuted)] hover:bg-[var(--premium-card)]/20 transition-all md:hidden"
                   title="Open menu"
                 >
                   <Menu className="w-5 h-5" />
                 </button>
               )}
               <h1 className="text-xl font-bold text-premium-accent dark:text-premium-accent tracking-tight">Awiad ERP</h1>
-              <span className="text-xs text-premium-textMuted dark:text-premium-textMuted ml-2 font-medium">{user?.company_name || 'Master Admin'}</span>
+              <span className="text-xs text-premium-textMuted dark:text-premium-textMuted ml-2 font-medium hidden sm:inline-block">
+                {user?.company_name || 'Master Admin'}
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <div className="hidden md:block text-sm text-premium-textMuted dark:text-premium-textMuted font-medium">{user?.name}</div>
             </div>
           </header>
 
-          <main className="flex-1 overflow-y-auto p-4 md:p-6">
+          <main className="flex-1 p-4 md:p-6 pb-20">
             <Outlet />
           </main>
         </div>
