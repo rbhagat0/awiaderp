@@ -43,9 +43,12 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [forgotMode, setForgotMode] = useState(false);
+  const [forgotStep, setForgotStep] = useState('role'); // role, email, otp, success
   const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotRole, setForgotRole] = useState('');
   const [forgotLoading, setForgotLoading] = useState(false);
   const [forgotSuccess, setForgotSuccess] = useState(false);
+  const [requiresApproval, setRequiresApproval] = useState(false);
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
 
@@ -76,8 +79,9 @@ export default function LoginPage() {
     setError('');
     try {
       setForgotLoading(true);
-      await api.post('/auth/forgot-password', { email: forgotEmail });
-      setForgotSuccess(true);
+      const response = await api.post('/auth/forgot-password', { email: forgotEmail, role: forgotRole });
+      setRequiresApproval(response.data.requiresApproval || false);
+      setForgotStep('success');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to send reset link.');
     } finally {
@@ -108,38 +112,88 @@ export default function LoginPage() {
             <div className="flex justify-center mb-8">
               <AwiadLogo height={48} />
             </div>
-            <h1 className="text-2xl font-bold text-premium-text tracking-tight mb-2">Forgot Password</h1>
-            <p className="text-sm text-premium-textMuted mb-8">Enter your email and we'll send you a reset link.</p>
 
-            {forgotSuccess ? (
-              <div className="p-4 rounded-2xl bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400">
-                <p className="text-sm font-semibold">Reset link sent!</p>
-                <p className="text-xs opacity-80 mt-1">Check your inbox for instructions.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleForgotPassword} className="space-y-5 text-left">
-                <div>
-                  <label className="block text-xs font-semibold text-premium-textMuted uppercase tracking-wider mb-2 ml-1">Email</label>
-                  <div className="relative group">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-premium-textMuted group-focus-within:text-brand transition-colors" />
-                    <input
-                      type="email"
-                      value={forgotEmail}
-                      onChange={(e) => setForgotEmail(e.target.value)}
-                      required
-                      className="input-field pl-12 py-3.5 bg-premium-bg/50 backdrop-blur-sm"
-                      placeholder="you@company.com"
-                    />
-                  </div>
+            {forgotStep === 'role' && (
+              <>
+                <h1 className="text-2xl font-bold text-premium-text tracking-tight mb-2">Forgot Password</h1>
+                <p className="text-sm text-premium-textMuted mb-8">Select your account type</p>
+                <div className="grid grid-cols-2 gap-4 mb-8">
+                  <button
+                    onClick={() => { setForgotRole('company_admin'); setForgotStep('email'); }}
+                    className="p-4 rounded-2xl border border-premium-border bg-premium-bg/50 hover:bg-premium-card/40 transition-colors text-left"
+                  >
+                    <div className="font-semibold text-premium-text">Company Admin</div>
+                    <div className="text-xs text-premium-textMuted mt-1">Direct reset link</div>
+                  </button>
+                  <button
+                    onClick={() => { setForgotRole('employee'); setForgotStep('email'); }}
+                    className="p-4 rounded-2xl border border-premium-border bg-premium-bg/50 hover:bg-premium-card/40 transition-colors text-left"
+                  >
+                    <div className="font-semibold text-premium-text">Employee</div>
+                    <div className="text-xs text-premium-textMuted mt-1">Needs admin approval</div>
+                  </button>
                 </div>
-                <button type="submit" disabled={forgotLoading} className="btn-primary w-full py-3.5 flex justify-center items-center gap-2">
-                  {forgotLoading ? <><Loader2 className="w-4 h-4 animate-spin" /> Sending...</> : <>Send Reset Link <ArrowRight className="w-4 h-4" /></>}
+                <button onClick={() => { setForgotMode(false); setForgotStep('role'); }} className="mt-8 text-sm font-semibold text-premium-textMuted hover:text-brand transition-colors">
+                  ← Back to sign in
                 </button>
-              </form>
+              </>
             )}
-            <button onClick={() => { setForgotMode(false); setForgotSuccess(false); }} className="mt-8 text-sm font-semibold text-premium-textMuted hover:text-brand transition-colors">
-              ← Back to sign in
-            </button>
+
+            {forgotStep === 'email' && (
+              <>
+                <h1 className="text-2xl font-bold text-premium-text tracking-tight mb-2">Forgot Password</h1>
+                <p className="text-sm text-premium-textMuted mb-8">
+                  {forgotRole === 'employee'
+                    ? 'Enter your email. Your company admin will approve the reset.'
+                    : 'Enter your email and we\'ll send you a reset link.'}
+                </p>
+                <form onSubmit={handleForgotPassword} className="space-y-5 text-left">
+                  <div>
+                    <label className="block text-xs font-semibold text-premium-textMuted uppercase tracking-wider mb-2 ml-1">Email</label>
+                    <div className="relative group">
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-premium-textMuted group-focus-within:text-brand transition-colors" />
+                      <input
+                        type="email"
+                        value={forgotEmail}
+                        onChange={(e) => setForgotEmail(e.target.value)}
+                        required
+                        className="input-field pl-12 py-3.5 bg-premium-bg/50 backdrop-blur-sm"
+                        placeholder="you@company.com"
+                      />
+                    </div>
+                  </div>
+                  <button type="submit" disabled={forgotLoading} className="btn-primary w-full py-3.5 flex justify-center items-center gap-2">
+                    {forgotLoading ? <><Loader2 className="w-4 h-4 animate-spin" /> Sending...</> : <>Send Reset Request <ArrowRight className="w-4 h-4" /></>}
+                  </button>
+                </form>
+                <button onClick={() => setForgotStep('role')} className="mt-6 text-sm font-semibold text-premium-textMuted hover:text-brand transition-colors">
+                  ← Change account type
+                </button>
+              </>
+            )}
+
+            {forgotStep === 'success' && (
+              <>
+                <h1 className="text-2xl font-bold text-premium-text tracking-tight mb-2">
+                  {requiresApproval ? 'Request Submitted' : 'Reset Link Sent'}
+                </h1>
+                <div className="p-4 rounded-2xl bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400 mb-8">
+                  <p className="text-sm font-semibold">
+                    {requiresApproval
+                      ? 'Your reset request has been submitted to your company admin for approval.'
+                      : 'Reset link sent!'}
+                  </p>
+                  <p className="text-xs opacity-80 mt-1">
+                    {requiresApproval
+                      ? 'You will be notified once approved.'
+                      : 'Check your inbox for instructions.'}
+                  </p>
+                </div>
+                <button onClick={() => { setForgotMode(false); setForgotStep('role'); setForgotSuccess(false); setRequiresApproval(false); }} className="mt-8 text-sm font-semibold text-premium-textMuted hover:text-brand transition-colors">
+                  ← Back to sign in
+                </button>
+              </>
+            )}
           </div>
         ) : (
           <div className="text-center animate-in fade-in zoom-in duration-300">

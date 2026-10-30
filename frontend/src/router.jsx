@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage';
+import ResetPassword from './pages/ResetPassword';
 import DashboardPage from './pages/DashboardPage';
 import MasterAdminPage from './pages/MasterAdminPage';
 import HomeHubPage from './pages/HomeHubPage';
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  {
+    path: '/reset-password/:token',
+    element: <ResetPassword />,
   },
 ]);
 

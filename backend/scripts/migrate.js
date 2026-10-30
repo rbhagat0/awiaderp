@@ -129,6 +129,27 @@ async function migrate() {
       ADD COLUMN IF NOT EXISTS subscription_duration VARCHAR(50);
     `);
 
+    // Password reset requests table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS password_resets (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+        email VARCHAR(255) NOT NULL,
+        role VARCHAR(50) NOT NULL,
+        company_id UUID REFERENCES companies(id) ON DELETE CASCADE,
+        token VARCHAR(255) UNIQUE NOT NULL,
+        status VARCHAR(20) DEFAULT 'pending',
+        requested_by UUID REFERENCES users(id),
+        approved_by UUID REFERENCES users(id),
+        expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+        used_at TIMESTAMP WITH TIME ZONE,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+    `);
+
+    await client.query('CREATE INDEX IF NOT EXISTS idx_password_resets_token ON password_resets(token);');
+    await client.query('CREATE INDEX IF NOT EXISTS idx_password_resets_status ON password_resets(status);');
+
     await client.query('COMMIT');
     console.log('Migration completed successfully');
   } catch (err) {

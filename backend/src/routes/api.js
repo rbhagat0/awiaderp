@@ -16,6 +16,11 @@ const router = express.Router();
 router.post('/auth/register', authController.register);
 router.post('/auth/login', authController.login);
 router.get('/auth/profile', authenticateToken, authController.getProfile);
+router.post('/auth/forgot-password', authController.forgotPassword);
+router.post('/auth/reset-password/:token', authController.resetPassword);
+router.get('/auth/pending-resets', authenticateToken, authorizeRoles('company_admin'), authController.getPendingResets);
+router.post('/auth/approve-reset', authenticateToken, authorizeRoles('company_admin'), authController.approveReset);
+router.post('/auth/force-reset-company-admin/:company_id', authenticateToken, authorizeRoles('super_admin'), authController.forceResetCompanyAdmin);
 
 // Company routes (Super Admin only)
 router.get('/companies', authenticateToken, authorizeRoles('super_admin'), companyController.getAllCompanies);

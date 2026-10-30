@@ -25,8 +25,10 @@ export default function CompanyAdminDashboard() {
     financial_year: 'Jan-Dec'
   });
   const [showDetails, setShowDetails] = useState(false);
-  const [message, setMessage] = useState('');
-
+  const [message, setMessage] = useState('');const [pendingResets, setPendingResets] = useState([]);
+const [showResetModal, setShowResetModal] = useState(false);
+const [selectedReset, setSelectedReset] = useState(null);
+const [error, setError] = useState('');
   // Mock data for features not yet in the backend
   const mockFacilities = [
     { id: 1, name: 'Global Headquarters', type: 'Office', address: 'Tech City, CA', isPrimary: true },
@@ -41,6 +43,7 @@ export default function CompanyAdminDashboard() {
   useEffect(() => {
     if (user?.role === 'company_admin') {
       fetchCompany();
+      fetchPendingResets();
     }
   }, [user]);
 
@@ -80,6 +83,31 @@ export default function CompanyAdminDashboard() {
       setLoading(false);
     }
   };
+
+  const fetchPendingResets = async () => {
+    try {
+      const response = await api.get('/auth/pending-resets');
+      setPendingResets(response.data);
+    } catch (err) {
+      console.error('Failed to fetch pending resets:', err);
+    }
+  };
+
+  const handleApproveReset = async (resetId, action) => {
+    try {
+      const response = await api.post('/auth/approve-reset', { resetId, action });
+      setMessage(response.data.message);
+      setTimeout(() => setMessage(''), 3000);
+      setSelectedReset(null);
+      setShowResetModal(false);
+      fetchPendingResets();
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to process request');
+      setTimeout(() => setError(''), 3000);
+    }
+  };
+
+
 
   const handleUpdateDetails = async (e) => {
     e.preventDefault();
@@ -381,6 +409,47 @@ export default function CompanyAdminDashboard() {
                 </div>
               </div>
 
+              {/* Pending Password Resets */}
+              <div className="glass-panel p-6">
+                <div className="flex items-center gap-3 mb-5 border-b border-premium-border/50 pb-3">
+                  <Lock className="w-5 h-5 text-premium-textMuted" />
+                  <h2 className="text-base font-bold text-premium-text">Pending Resets</h2>
+                </div>
+                {pendingResets.length === 0 ? (
+                  <p className="text-sm text-premium-textMuted text-center py-4">No pending password reset requests</p>
+                ) : (
+                  <div className="space-y-3">
+                    {pendingResets.map(reset => (
+                      <div key={reset.id} className="p-3 rounded-xl bg-premium-bg/30 border border-premium-border/30">
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <p className="text-sm font-bold text-premium-text">{reset.user_name || reset.email}</p>
+                            <p className="text-xs text-premium-textMuted">{reset.email}</p>
+                          </div>
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">
+                            Pending
+                          </span>
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => { setSelectedReset(reset); setShowResetModal(true); }}
+                            className="flex-1 py-2 px-3 rounded-lg bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/20 text-xs font-bold transition-colors"
+                          >
+                            Approve
+                          </button>
+                          <button
+                            onClick={() => handleApproveReset(reset.id, 'reject')}
+                            className="flex-1 py-2 px-3 rounded-lg bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20 text-xs font-bold transition-colors"
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
             </div>
           </div>
 
@@ -488,6 +557,62 @@ export default function CompanyAdminDashboard() {
                     <button type="submit" className="btn-primary py-2.5 px-6 shadow-brand/20 shadow-lg text-sm">Save Preferences</button>
                   </div>
                 </form>
+              </div>
+            </div>
+          )}
+
+          {/* Reset Approval Modal */}
+          {showResetModal && selectedReset && (
+            <div className="modal-overlay animate-in fade-in duration-200 z-50">
+              <div className="glass-modal w-full max-w-md max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200 shadow-2xl">
+                <div className="flex items-center justify-between p-5 md:p-6 border-b border-premium-border/50 sticky top-0 bg-premium-card/90 backdrop-blur-xl z-20">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-yellow-500/10 text-yellow-500 rounded-lg">
+                      <Lock className="w-4 h-4" />
+                    </div>
+                    <h2 className="text-lg font-bold text-premium-text tracking-tight">Approve Password Reset</h2>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowResetModal(false)}
+                    className="p-1.5 text-premium-textMuted hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="p-5 md:p-6 space-y-6">
+                  <div>
+                    <p className="text-sm font-bold text-premium-text mb-1">Employee</p>
+                    <p className="text-sm text-premium-textMuted">{selectedReset.user_name || selectedReset.email}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-premium-text mb-1">Email</p>
+                    <p className="text-sm text-premium-textMuted font-mono">{selectedReset.email}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-premium-text mb-1">Requested</p>
+                    <p className="text-sm text-premium-textMuted">{new Date(selectedReset.created_at).toLocaleDateString()}</p>
+                  </div>
+
+                  <div className="pt-4 border-t border-premium-border/50">
+                    <p className="text-xs font-bold text-premium-textMuted uppercase tracking-wider mb-3">Action</p>
+                    <div className="space-y-3">
+                      <button
+                        onClick={() => handleApproveReset(selectedReset.id, 'approve')}
+                        className="w-full py-3 px-4 rounded-xl bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/20 font-bold text-sm transition-colors"
+                      >
+                        ✓ Approve Reset Request
+                      </button>
+                      <button
+                        onClick={() => handleApproveReset(selectedReset.id, 'reject')}
+                        className="w-full py-3 px-4 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20 font-bold text-sm transition-colors"
+                      >
+                        ✗ Reject Reset Request
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
