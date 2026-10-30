@@ -89,7 +89,7 @@ export default function LoginPage() {
       {/* Theme toggle in corner */}
       <button
         onClick={toggleTheme}
-        className="fixed top-4 right-4 z-50 p-2.5 rounded-xl bg-[var(--premium-card)]/10 text-[var(--premium-textMuted)] hover:bg-[var(--premium-card)]/20 transition-all border border-[var(--premium-border)]/20"
+        className="fixed top-4 right-4 z-50 p-2.5 rounded-xl bg-premium-card/10 text-premium-textMuted hover:bg-premium-card/20 transition-all border-premium-border/20 border"
         title="Toggle dark mode"
         aria-label="Toggle dark mode"
       >
@@ -173,7 +173,7 @@ export default function LoginPage() {
 
             <button
               onClick={toggleTheme}
-              className="mt-4 p-2.5 rounded-xl bg-[var(--premium-card)]/10 text-[var(--premium-textMuted)] hover:bg-[var(--premium-card)]/20 transition-all border border-[var(--premium-border)]/20"
+              className="mt-4 p-2.5 rounded-xl bg-premium-card/10 text-premium-textMuted hover:bg-premium-card/20 transition-all border-premium-border/20 border"
               title="Toggle dark mode"
             >
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
