@@ -37,7 +37,7 @@ export const authorizeRoles = (...roles) => {
 };
 
 export const requireCompanyAccess = (req, res, next) => {
-  const { company_id } = req.params || req.body || req.query;
+  const companyId = req.params?.company_id || req.params?.id || req.body?.company_id || req.query?.company_id;
   const userCompanyId = req.user?.company_id;
   const userRole = req.user?.role;
 
@@ -47,7 +47,7 @@ export const requireCompanyAccess = (req, res, next) => {
   }
 
   // Company users must access their own company
-  if (!company_id || company_id !== userCompanyId) {
+  if (!companyId || companyId !== userCompanyId) {
     return res.status(403).json({ error: 'Access denied to this company' });
   }
 

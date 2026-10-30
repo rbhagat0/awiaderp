@@ -1,5 +1,7 @@
 import express from 'express';
 import { authenticateToken, authorizeRoles, requireCompanyAccess } from '../middleware/auth.js';
+import { tierLimitMiddleware } from '../middleware/tierLimit.js';
+import { checkSubscriptionExpiry } from '../middleware/subscriptionExpiry.js';
 import { companyController } from '../controllers/companyController.js';
 import { authController } from '../controllers/authController.js';
 import { clientController } from '../controllers/clientController.js';
@@ -18,39 +20,39 @@ router.get('/auth/profile', authenticateToken, authController.getProfile);
 // Company routes (Super Admin only)
 router.get('/companies', authenticateToken, authorizeRoles('super_admin'), companyController.getAllCompanies);
 router.post('/companies', authenticateToken, authorizeRoles('super_admin'), companyController.createCompany);
-router.get('/companies/:id', authenticateToken, authorizeRoles('super_admin'), companyController.getCompanyById);
+router.get('/companies/:id', authenticateToken, authorizeRoles('super_admin', 'company_admin'), requireCompanyAccess, companyController.getCompanyById);
+router.patch('/companies/details', authenticateToken, authorizeRoles('company_admin'), companyController.updateCompanyDetails);
 router.patch('/companies/:id', authenticateToken, authorizeRoles('super_admin'), companyController.updateCompany);
 router.delete('/companies/:id', authenticateToken, authorizeRoles('super_admin'), companyController.deleteCompany);
-router.patch('/companies/details', authenticateToken, authorizeRoles('company_admin'), companyController.updateCompanyDetails);
 
 // Client routes (Tenant)
-router.get('/clients', authenticateToken, requireCompanyAccess, clientController.getClients);
-router.post('/clients', authenticateToken, requireCompanyAccess, clientController.createClient);
-router.put('/clients/:id', authenticateToken, requireCompanyAccess, clientController.updateClient);
-router.delete('/clients/:id', authenticateToken, requireCompanyAccess, clientController.deleteClient);
+router.get('/clients', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, clientController.getClients);
+router.post('/clients', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, tierLimitMiddleware('clients', 'maxClients'), clientController.createClient);
+router.put('/clients/:id', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, clientController.updateClient);
+router.delete('/clients/:id', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, clientController.deleteClient);
 
 // Lead routes (Tenant)
-router.get('/leads', authenticateToken, requireCompanyAccess, leadController.getLeads);
-router.post('/leads', authenticateToken, requireCompanyAccess, leadController.createLead);
-router.put('/leads/:id', authenticateToken, requireCompanyAccess, leadController.updateLead);
-router.delete('/leads/:id', authenticateToken, requireCompanyAccess, leadController.deleteLead);
+router.get('/leads', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, leadController.getLeads);
+router.post('/leads', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, tierLimitMiddleware('leads', 'maxClients'), leadController.createLead);
+router.put('/leads/:id', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, leadController.updateLead);
+router.delete('/leads/:id', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, leadController.deleteLead);
 
 // Project routes (Tenant)
-router.get('/projects', authenticateToken, requireCompanyAccess, projectController.getProjects);
-router.post('/projects', authenticateToken, requireCompanyAccess, projectController.createProject);
-router.put('/projects/:id', authenticateToken, requireCompanyAccess, projectController.updateProject);
-router.delete('/projects/:id', authenticateToken, requireCompanyAccess, projectController.deleteProject);
+router.get('/projects', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, projectController.getProjects);
+router.post('/projects', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, tierLimitMiddleware('projects', 'maxProjects'), projectController.createProject);
+router.put('/projects/:id', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, projectController.updateProject);
+router.delete('/projects/:id', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, projectController.deleteProject);
 
 // Task routes (Tenant)
-router.get('/tasks', authenticateToken, requireCompanyAccess, taskController.getTasks);
-router.post('/tasks', authenticateToken, requireCompanyAccess, taskController.createTask);
-router.put('/tasks/:id', authenticateToken, requireCompanyAccess, taskController.updateTask);
-router.delete('/tasks/:id', authenticateToken, requireCompanyAccess, taskController.deleteTask);
+router.get('/tasks', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, taskController.getTasks);
+router.post('/tasks', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, tierLimitMiddleware('tasks', 'maxTasks'), taskController.createTask);
+router.put('/tasks/:id', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, taskController.updateTask);
+router.delete('/tasks/:id', authenticateToken, requireCompanyAccess, checkSubscriptionExpiry, taskController.deleteTask);
 
 // Employee routes (Company Admin)
-router.get('/employees', authenticateToken, authorizeRoles('company_admin'), employeeController.getEmployees);
-router.post('/employees', authenticateToken, authorizeRoles('company_admin'), employeeController.createEmployee);
-router.put('/employees/:id', authenticateToken, authorizeRoles('company_admin'), employeeController.updateEmployee);
-router.delete('/employees/:id', authenticateToken, authorizeRoles('company_admin'), employeeController.deleteEmployee);
+router.get('/employees', authenticateToken, authorizeRoles('company_admin'), checkSubscriptionExpiry, employeeController.getEmployees);
+router.post('/employees', authenticateToken, authorizeRoles('company_admin'), checkSubscriptionExpiry, tierLimitMiddleware('employees', 'maxUsers'), employeeController.createEmployee);
+router.put('/employees/:id', authenticateToken, authorizeRoles('company_admin'), checkSubscriptionExpiry, employeeController.updateEmployee);
+router.delete('/employees/:id', authenticateToken, authorizeRoles('company_admin'), checkSubscriptionExpiry, employeeController.deleteEmployee);
 
 export default router;
