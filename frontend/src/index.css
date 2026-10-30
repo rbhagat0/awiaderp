@@ -13,6 +13,7 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     /* Premium light theme colors */
+    --premium-dark: rgba(255, 255, 255, 1);
     --premium-bg: rgba(255, 255, 255, 1);
     --premium-bg-secondary: rgba(249, 250, 251, 1);
     --premium-card: rgba(255, 255, 255, 1);
@@ -34,6 +35,7 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
     /* Premium dark theme colors */
+    --premium-dark: rgba(15, 23, 42, 1);
     --premium-bg: rgba(15, 23, 42, 1);
     --premium-bg-secondary: rgba(30, 41, 59, 1);
     --premium-card: rgba(30, 41, 59, 1);
